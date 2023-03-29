@@ -6,9 +6,13 @@ export const globalStyles = (
       html,
       body {
         margin: 0;
-        min-height: 100%;
-        font-family: Helvetica, Arial, sans-serif;
+        padding: 0;
+        box-sizing: border-box;
         font-size: 24px;
+      }
+      a {
+        text-decoration: none;
+        outline: none;
       }
     `}
   />
