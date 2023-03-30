@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Suspense, MutableRefObject } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stage } from "@react-three/drei";
+import { OrbitControls, Stage, ContactShadows } from "@react-three/drei";
 import Model from "./model";
 
 const CanvasWrapper = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
@@ -16,10 +16,8 @@ const CanvasWrapper = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
         }}
       >
         <Suspense fallback={null}>
-          <Stage intensity={0.7} castShadow={false} shadows={false}>
-            false
+          <Stage intensity={0.7} castShadow={true} shadows={true}>
             <Model mouse={mouse} />
-            false
           </Stage>
         </Suspense>
       </Canvas>
