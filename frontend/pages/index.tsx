@@ -1,77 +1,39 @@
-import { common } from "@/styles/common";
+import { useRef, PointerEvent } from "react";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import Link from "next/link";
-import { Alata } from "@next/font/google";
+import { common } from "@/styles/common";
+import MainWrapper from "@/components/main/mainWrapper";
+import CanvasWrapper from "@/components/main/canvasWrapper";
 
-const alata = Alata({ weight: ["400"], preload: false });
+const Home = () => {
+  const mouse = useRef<number[]>([0, 0]);
+  const handleMouseMove = (event: PointerEvent<HTMLDivElement>) => {
+    mouse.current = [event.clientX, event.clientY];
+  };
 
-export default function Home() {
   return (
-    <Background>
-      <MainWrapper>
-        <Title>moim</Title>
-        <Link
-          href={{
-            pathname: "/board/[boardNumber]",
-            query: { boardNumber: "1" },
-          }}
-        >
-          <GenerateButton>모임 만들기</GenerateButton>
-        </Link>
-      </MainWrapper>
-    </Background>
+    <>
+      <Background onPointerMove={handleMouseMove}>
+        <MainWrapper />
+        <CanvasWrapper mouse={mouse} />
+      </Background>
+    </>
   );
-}
-
-const mainWrapperCss = css`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const MainWrapper = styled.div`
-  ${mainWrapperCss}
-`;
-
-const generateButtonCss = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: ${common.gradient.secondaryGradient};
-  color: white;
-  width: 10rem;
-  height: 3.6rem;
-  border-radius: 1.8rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-`;
-
-const GenerateButton = styled.div`
-  ${generateButtonCss}
-`;
-
-const titleCss = css`
-  color: white;
-  font-family: ${alata.style.fontFamily};
-  font-size: 10rem;
-  padding-bottom: 1rem;
-`;
-
-const Title = styled.div`
-  ${titleCss}
-`;
+};
 
 const backgroundCss = css`
-  background: ${common.gradient.primaryGradient};
+  position: absolute;
+  z-index: 1;
   width: 100vw;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${common.gradient.primaryGradient};
 `;
 
 const Background = styled.div`
   ${backgroundCss}
 `;
+
+export default Home;
