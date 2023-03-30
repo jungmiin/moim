@@ -7,6 +7,7 @@ export const common = {
   },
   colors: {
     primaryColor: "#80A9DA",
+    secondaryColor: "#BEA9EA",
     primaryGrey: "#B9B9B9",
     primaryBlack: "#181818",
     secondaryGrey: "#CCCCCC",

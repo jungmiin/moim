@@ -12,7 +12,7 @@ const Calendar = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
     const y = -(mouse.current[1] / window.innerHeight) * 2 + 1;
     ref.current.rotation.x = y * -0.8;
     ref.current.rotation.y = x * 0.8;
-    ref.current.position.y = (-16 + Math.cos(t / 2)) / 7;
+    ref.current.position.y = (-6 + Math.cos(t / 2)) / 7;
   });
 
   return (
@@ -38,7 +38,7 @@ const SpeechBubble = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
     const y = -(mouse.current[1] / window.innerHeight) * 2 + 1;
     ref.current.rotation.x = y * 0.8;
     ref.current.rotation.y = x * -0.8;
-    ref.current.position.y = (0 + Math.cos(t / 2)) / 7;
+    ref.current.position.y = (6 + Math.cos(t / 2)) / 7;
   });
 
   return (
