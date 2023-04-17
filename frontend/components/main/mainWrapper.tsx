@@ -35,8 +35,11 @@ const MainWrapper = () => {
             setRoomName(event.target.value);
           }}
           value={roomName}
-        ></RoomNameInput>
-        <RoomNameButton className={roomName ? "" : "hide"}>
+        />
+        <RoomNameButton
+          className={roomName ? "" : "hide"}
+          disabled={roomName ? false : true}
+        >
           만들기
         </RoomNameButton>
       </RoomNameInputArea>
@@ -86,7 +89,6 @@ const RoomNameInputArea = styled.div`
 `;
 
 const roomNameInputCss = css`
-  all: unset;
   width: 100%;
   margin: 0 1rem 0 0.5rem;
   &::placeholder {
@@ -98,16 +100,15 @@ const RoomNameInput = styled.input`
 `;
 
 const roomNameButtonCss = css`
-  all: unset;
-  cursor: pointer;
   font-weight: 700;
   color: ${common.colors.primaryColor};
   margin-right: 1rem;
   white-space: nowrap;
   z-index: 4;
   transition: all 0.2s linear 0s;
-  &.hide {
+  &:disabled {
     color: ${common.colors.secondaryGrey};
+    cursor: default;
   }
 `;
 const RoomNameButton = styled.button`
@@ -130,7 +131,6 @@ const Wrapper = styled.div`
 // TODO : 버튼 공용 컴포넌트로 만들기
 
 const generateButtonCss = css`
-  all: unset;
   transition: all 0.2s linear 0s;
   position: relative;
   display: flex;
@@ -143,7 +143,6 @@ const generateButtonCss = css`
   border-radius: 1.8rem;
   font-size: 0.75rem;
   font-weight: 700;
-  cursor: pointer;
 
   &:after {
     content: "+";
