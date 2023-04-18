@@ -41,6 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", "npm:18.0.10"],\
             ["@types/three", "npm:0.150.0"],\
             ["@yarnpkg/sdks", "npm:3.0.0-rc.39"],\
+            ["dayjs", "npm:1.11.7"],\
             ["emotion", "npm:11.0.0"],\
             ["eslint", "npm:8.34.0"],\
             ["eslint-config-next", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:13.1.6"],\
@@ -1941,6 +1942,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["dayjs", [\
+        ["npm:1.11.7", {\
+          "packageLocation": "./.yarn/cache/dayjs-npm-1.11.7-d5cd5b2919-5003a7c1dd.zip/node_modules/dayjs/",\
+          "packageDependencies": [\
+            ["dayjs", "npm:1.11.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["debounce", [\
         ["npm:1.2.1", {\
           "packageLocation": "./.yarn/cache/debounce-npm-1.2.1-b09266a260-682a89506d.zip/node_modules/debounce/",\
@@ -2845,6 +2855,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", "npm:18.0.10"],\
             ["@types/three", "npm:0.150.0"],\
             ["@yarnpkg/sdks", "npm:3.0.0-rc.39"],\
+            ["dayjs", "npm:1.11.7"],\
             ["emotion", "npm:11.0.0"],\
             ["eslint", "npm:8.34.0"],\
             ["eslint-config-next", "virtual:d9650954c7f1725ea712d2e40695de9ea5d1c0fa9b89379134c62909d440d91b03d6c37e2823804a3404472b90a5bec73c82193190dd3c4db4c9e9edd75db91e#npm:13.1.6"],\

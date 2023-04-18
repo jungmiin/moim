@@ -14,6 +14,13 @@ export const globalStyles = (
         text-decoration: none;
         outline: none;
       }
+      button {
+        all: unset;
+        cursor: pointer;
+      }
+      input {
+        all: unset;
+      }
     `}
   />
 );
