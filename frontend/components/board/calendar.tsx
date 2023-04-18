@@ -65,7 +65,6 @@ const Calendar = () => {
     let weekCounter = 1;
 
     while (currentDate.weekday(-6).toObject().months !== nextMonth) {
-      console.log(currentDate.weekday(0).toObject());
       const formated = formatedDateObject(currentDate);
       weekDates.push(formated);
 
@@ -90,7 +89,6 @@ const Calendar = () => {
     const rows: Array<JSX.Element> = [];
     let dates: Array<JSX.Element> = [];
     arrayOfDays.forEach((week: WeekInterface) => {
-      console.log(week);
       week["dates"].forEach((d: DayInterface) => {
         dates.push(
           <Date className={d.isCurrentMonth ? "" : "previous"}>
