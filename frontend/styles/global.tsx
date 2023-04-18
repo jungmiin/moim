@@ -9,8 +9,6 @@ export const globalStyles = (
         padding: 0;
         box-sizing: border-box;
         font-size: 24px;
-        width: 100vw;
-        height: 100vh;
       }
       a {
         text-decoration: none;

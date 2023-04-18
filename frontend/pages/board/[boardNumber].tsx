@@ -5,12 +5,10 @@ import ResultWrapper from "@/components/board/resultWrapper";
 
 const board = () => {
   return (
-    <>
-      <Wrapper>
-        <CalendarWrapper />
-        <ResultWrapper />
-      </Wrapper>
-    </>
+    <Wrapper>
+      <CalendarWrapper />
+      <ResultWrapper />
+    </Wrapper>
   );
 };
 
