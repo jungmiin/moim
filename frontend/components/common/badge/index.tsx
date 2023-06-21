@@ -10,7 +10,9 @@ interface badgePropsInterface {
   removable?: boolean;
   onRemove?: Function;
   id: number;
-  isNew: boolean;
+  isNew?: boolean;
+  isSelected?: boolean;
+  onSelect?: Function;
 }
 
 const Badge = React.memo(function Badge({
@@ -20,6 +22,8 @@ const Badge = React.memo(function Badge({
   onRemove,
   id,
   isNew,
+  isSelected,
+  onSelect,
 }: badgePropsInterface) {
   const wrapperCss = css`
     display: flex;
@@ -30,6 +34,12 @@ const Badge = React.memo(function Badge({
     padding: 0.25rem 0.67rem;
     border-radius: 1rem;
     margin: 0.2rem 0.05rem;
+    cursor: pointer;
+    &.not_selected {
+      background-color: white;
+      color: ${color};
+      box-shadow: 0 0 0 1px ${color} inset;
+    }
     &.new {
       animation: smoothAppear 1s;
       @keyframes smoothAppear {
@@ -60,7 +70,20 @@ const Badge = React.memo(function Badge({
   `;
 
   return (
-    <Wrapper className={isNew ? "new" : ""}>
+    <Wrapper
+      className={
+        isNew
+          ? "new"
+          : isNew !== undefined
+          ? ""
+          : isSelected
+          ? ""
+          : "not_selected"
+      }
+      onClick={() => {
+        if (onSelect) onSelect(id);
+      }}
+    >
       {removable ? (
         <button
           onClick={() => {

@@ -20,8 +20,7 @@ const Calendar = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
       <mesh
         geometry={nodes.notejoined.geometry}
         material={materials["Material.002"]}
-        position={[5.2, 0, 0]}
-        scale={0.15}
+        position={[2, 0, 0]}
         ref={ref}
       />
     </group>
@@ -46,8 +45,7 @@ const SpeechBubble = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
       <mesh
         geometry={nodes.Cylinder001.geometry}
         material={materials["Material.002"]}
-        scale={[0.16, 0.033, 0.16]}
-        position={[-6, 0, 0]}
+        position={[-2, 0, 0]}
         ref={ref}
       />
     </group>

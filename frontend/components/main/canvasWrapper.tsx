@@ -8,26 +8,18 @@ import Model from "./model";
 const CanvasWrapper = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
   return (
     <Wrapper>
-      <Canvas
-        orthographic
-        dpr={[1, 2]}
-        camera={{
-          position: [0, 0, 10],
-        }}
-      >
-        <Suspense fallback={null}>
-          <Stage intensity={0.7} castShadow={true} shadows={true}>
-            <Model mouse={mouse} />
-          </Stage>
-        </Suspense>
+      <Canvas orthographic>
+        <Stage adjustCamera={1.5}>
+          <Model mouse={mouse} />
+        </Stage>
       </Canvas>
     </Wrapper>
   );
 };
 
 const wrapperCss = css`
-  width: 80vw;
-  height: 80vh;
+  width: 100vw;
+  height: 100vh;
 `;
 
 const Wrapper = styled.div`
