@@ -13,15 +13,15 @@ const Home = () => {
 
   return (
     <>
-      <Background onPointerMove={handleMouseMove}>
+      <Index onPointerMove={handleMouseMove}>
         <MainWrapper />
         <CanvasWrapper mouse={mouse} />
-      </Background>
+      </Index>
     </>
   );
 };
 
-const backgroundCss = css`
+const indexCss = css`
   position: absolute;
   z-index: 1;
   width: 100vw;
@@ -32,8 +32,8 @@ const backgroundCss = css`
   background: ${common.gradient.primaryGradient};
 `;
 
-const Background = styled.div`
-  ${backgroundCss}
+const Index = styled.div`
+  ${indexCss}
 `;
 
 export default Home;

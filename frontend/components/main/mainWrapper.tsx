@@ -121,7 +121,6 @@ const wrapperCss = css`
   flex-direction: column;
   align-items: center;
   z-index: 4;
-  margin-top: -5rem;
 `;
 
 const Wrapper = styled.div`
