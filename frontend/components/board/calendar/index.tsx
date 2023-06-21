@@ -2,16 +2,14 @@
 import { useState, useEffect, useCallback, ReactNode } from "react";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
 import dayjs from "dayjs";
 import weekdayPlugin from "dayjs/plugin/weekday";
 import objectPlugin from "dayjs/plugin/toObject";
 import isTodayPlugin from "dayjs/plugin/isToday";
 import { common } from "@/styles/common";
+import Header from "./header";
+
+// TODO : 인터페이스 꼭 공통으로 빼내기
 
 interface WeekInterface {
   dates: Array<DayInterface>;
@@ -23,19 +21,40 @@ interface DayInterface {
   year: Number;
   isCurrentMonth: Boolean;
   isCurrentDay: Boolean;
-  selectedPeople: Array<String>;
+  selectedPeople: Array<string>;
+}
+
+interface peopleInterface {
+  name: string;
+  color: string;
+  isSelected: boolean;
 }
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [arrayOfDays, setArrayOfDays] = useState<Array<WeekInterface>>([]);
+  const [people, setPeople] = useState<Array<peopleInterface>>([
+    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
+    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
+    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
+    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
+    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
+    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
+  ]);
+  const [isopenPeople, setOpenPeople] = useState(false);
+  const [selectedPeople, setSelectedPeople] = useState(-1);
+
+  useEffect(() => {
+    const newPeople = people.map((person, i) => {
+      if (selectedPeople === i) return { ...person, isSelected: true };
+      return { ...person, isSelected: false };
+    });
+    setPeople(newPeople);
+  }, [selectedPeople]);
 
   dayjs.extend(weekdayPlugin);
   dayjs.extend(objectPlugin);
   dayjs.extend(isTodayPlugin);
-  const nextMonthHandler = () => setCurrentMonth(currentMonth.add(1, "month"));
-  const prevMonthHandler = () =>
-    setCurrentMonth(currentMonth.subtract(1, "month"));
 
   const formatedDateObject = useCallback(
     (date: dayjs.Dayjs) => {
@@ -102,104 +121,20 @@ const Calendar = () => {
     return <Dates>{rows}</Dates>;
   };
 
-  const renderDayHeader = () => {
-    const days = ["월", "화", "수", "목", "금", "토", "일"];
-    const dayHeader: Array<JSX.Element> = days.map((day) => {
-      return (
-        <Day>
-          <span>{day}</span>
-        </Day>
-      );
-    });
-    return dayHeader;
-  };
-
-  const renderYearMonth = () => {
-    return `${currentMonth.year()}년 ${currentMonth.month() + 1}월`;
-  };
-
   return (
     <>
-      <TitleHeader>
-        <MonthControl>
-          <PrevMonthButton onClick={() => prevMonthHandler()}>
-            <FontAwesomeIcon
-              icon={faChevronLeft}
-              width="4"
-              color={common.colors.primaryGrey}
-            />
-          </PrevMonthButton>
-          <YearMonthHeader>{renderYearMonth()}</YearMonthHeader>
-          <NextMonthButton onClick={() => nextMonthHandler()}>
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              width="4"
-              color={common.colors.primaryGrey}
-            />
-          </NextMonthButton>
-        </MonthControl>
-      </TitleHeader>
-      <DayHeader>{renderDayHeader()}</DayHeader>
+      <Header
+        currentMonth={currentMonth}
+        setCurrentMonth={setCurrentMonth}
+        people={people}
+        selectedPeople={selectedPeople}
+        setSelectedPeople={setSelectedPeople}
+      />
       {renderDates()}
     </>
   );
 };
 
-const MonthControlCss = css`
-  display: flex;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.5rem;
-`;
-const MonthControl = styled.div`
-  ${MonthControlCss}
-`;
-
-const PrevMonthButtonCss = css`
-  padding: 0 0.2rem;
-`;
-const PrevMonthButton = styled.button`
-  ${PrevMonthButtonCss}
-`;
-
-const YearMonthHeaderCss = css``;
-const YearMonthHeader = styled.div`
-  ${YearMonthHeaderCss}
-`;
-
-const NextMonthButtonCss = css`
-  padding: 0 0.2rem;
-`;
-const NextMonthButton = styled.button`
-  ${NextMonthButtonCss}
-`;
-
-const titleHeaderCss = css``;
-const TitleHeader = styled.div`
-  ${titleHeaderCss}
-`;
-const dayHeaderCss = css`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-`;
-const DayHeader = styled.div`
-  ${dayHeaderCss}
-`;
-const dayCss = css`
-  width: 3.6rem;
-  padding: 0.75rem;
-  text-align: center;
-  font-size: 0.5rem;
-  font-weight: 700;
-  color: ${common.colors.primaryColor};
-`;
-const Day = styled.div`
-  ${dayCss}
-`;
 const datesCss = css`
   width: 100%;
 `;
