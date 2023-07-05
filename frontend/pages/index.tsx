@@ -2,8 +2,8 @@ import { useRef, PointerEvent } from "react";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { common } from "@/styles/common";
-import MainWrapper from "@/components/main/mainWrapper";
-import CanvasWrapper from "@/components/main/canvasWrapper";
+import MainWrapper from "@/components/main/main";
+import CanvasWrapper from "@/components/main/canvas";
 
 const Home = () => {
   const mouse = useRef<number[]>([0, 0]);

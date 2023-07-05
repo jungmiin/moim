@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { Suspense, MutableRefObject } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stage, ContactShadows } from "@react-three/drei";
-import Model from "./model";
+import Model from "./canvasModel";
 
 const CanvasWrapper = ({ mouse }: { mouse: MutableRefObject<number[]> }) => {
   return (
