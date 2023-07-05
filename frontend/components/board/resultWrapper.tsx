@@ -1,13 +1,12 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import { css } from "@emotion/react";
-import styled from "@emotion/styled";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import AddPeople from "@/components/board/addPeople";
-import MainCard from "@/components/common/card/mainCard";
-import SubCard from "@/components/common/card/subCard";
-import StrokeButton from "@/components/common/button/strokeButton";
+import EditPeople from "@/components/board/editPeople";
 import { common } from "@/styles/common";
+import { Button } from "../common/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CardList from "./cardList";
 
 const ResultWrapper = () => {
   const [isAddPeople, setAddPeople] = useState(false);
@@ -16,49 +15,58 @@ const ResultWrapper = () => {
     setAddPeople(!isAddPeople);
   };
 
+  const dates = [
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+    { date: dayjs(), available: 6, unavailable: 1 },
+  ];
+
   return (
     <>
       {isAddPeople ? (
-        <Wrapper>
-          <AddPeople toggleAddPeople={toggleAddPeople} />
-        </Wrapper>
+        <div css={css(wrapperStyle)}>
+          <EditPeople toggleAddPeople={toggleAddPeople} />
+        </div>
       ) : (
-        <Wrapper>
-          <StrokeButton
-            text="인원 추가하기"
-            color={common.colors.primaryColor}
-            width={17}
-            handler={toggleAddPeople}
-            svg={faPlus}
-            align={"left"}
-          />
-          <MainCard date={dayjs()} available={6} unavailable={1} />
-          <Proposal>이 날짜는 어떤가요?</Proposal>
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-          <SubCard date={dayjs()} available={6} unavailable={1} />
-        </Wrapper>
+        <div css={css(wrapperStyle)}>
+          <Button style={buttonStyle} onClick={toggleAddPeople}>
+            <Button.HoverIcon style={iconStyle}>
+              <FontAwesomeIcon className="fa" icon={faPlus} />
+            </Button.HoverIcon>
+            {"인원 추가하기"}
+          </Button>
+          <CardList dates={dates} />
+        </div>
       )}
     </>
   );
 };
 
-const proposalCss = css`
-  font-size: 0.67rem;
-  font-weight: 700;
+const buttonStyle = `
+  display: flex;
+  justify-content: center;
+  border: 1px solid ${common.colors.primaryColor};
+  border-radius: 3rem;
+  padding: 1rem 0;
+  width: 17rem;
   color: ${common.colors.primaryColor};
-  margin-bottom: 0.8rem;
-`;
-const Proposal = styled.div`
-  ${proposalCss}
+  font-weight: 700;
+  font-size: 0.75rem;
+  margin: 1rem 0;
 `;
 
-const WrapperCss = css`
+const iconStyle = `
+  margin-right: 0.3rem;
+`;
+
+const wrapperStyle = `
   flex-direction: column;
   padding: 0 2rem;
   max-width: 17rem;
@@ -76,9 +84,6 @@ const WrapperCss = css`
     background-color: white;
     border-radius: 3px;
   }
-`;
-const Wrapper = styled.div`
-  ${WrapperCss}
 `;
 
 export default ResultWrapper;
