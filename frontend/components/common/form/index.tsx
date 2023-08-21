@@ -7,7 +7,7 @@ import {
   ChangeEvent,
   useReducer,
 } from "react";
-import { css } from "@emotion/react";
+import { css, SerializedStyles } from "@emotion/react";
 
 interface formContextInterface {
   input: string;
@@ -59,7 +59,7 @@ const useFormContext = (component: string) => {
 
 interface formMainProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const FormMain = ({ children, style }: formMainProps) => {
@@ -84,18 +84,18 @@ const FormMain = ({ children, style }: formMainProps) => {
 
   return (
     <formContext.Provider value={{ ...state, changeInput, toggleForm }}>
-      {state.open && <div css={css(style)}>{children}</div>}
+      {state.open && <div css={style}>{children}</div>}
     </formContext.Provider>
   );
 };
 
 interface formLabelProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const FormLabel = ({ children, style }: formLabelProps) => {
-  return <div css={css(style)}>{children}</div>;
+  return <div css={style}>{children}</div>;
 };
 
 interface formToggleProps {
@@ -107,7 +107,7 @@ const FormToggle = ({ children, style }: formToggleProps) => {
   const { toggleForm } = useFormContext("Form.Toggle");
 
   return (
-    <button css={css(style)} onClick={toggleForm}>
+    <button css={style} onClick={toggleForm}>
       {children}
     </button>
   );
@@ -115,7 +115,7 @@ const FormToggle = ({ children, style }: formToggleProps) => {
 
 interface formSubmitProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
   onSubmit?: Function;
 }
 
@@ -125,7 +125,7 @@ const FormSubmit = ({ children, style, onSubmit }: formSubmitProps) => {
   // TODO: diabled 여부를 판단하는 것을 props로 재사용 가능하게
   return (
     <button
-      css={css(style)}
+      css={style}
       onClick={() => {
         if (onSubmit !== undefined) onSubmit(input);
         changeInput();
@@ -139,7 +139,7 @@ const FormSubmit = ({ children, style, onSubmit }: formSubmitProps) => {
 
 interface formInputProps {
   placeholder?: string;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const FormInput = ({ placeholder, style }: formInputProps) => {
@@ -147,7 +147,7 @@ const FormInput = ({ placeholder, style }: formInputProps) => {
 
   return (
     <input
-      css={css(style)}
+      css={style}
       placeholder={placeholder}
       onChange={changeInput}
       value={input}
