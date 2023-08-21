@@ -5,7 +5,7 @@ import {
   useReducer,
   MouseEventHandler,
 } from "react";
-import { css } from "@emotion/react";
+import { css, SerializedStyles } from "@emotion/react";
 
 interface buttonContextInterface {
   mouseOver: boolean;
@@ -49,19 +49,9 @@ const buttonReducer = (
   }
 };
 
-interface ButtonHoverIconProps {
-  children?: ReactNode;
-  style?: string;
-}
-
-const ButtonHoverIcon = ({ children, style }: ButtonHoverIconProps) => {
-  const { mouseOver } = useButtonContext("Button.HoverIcon");
-  return <>{mouseOver && <div css={css(style)}>{children}</div>}</>;
-};
-
 interface ButtonMainProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
   onClick?: MouseEventHandler<Element>;
 }
 
@@ -78,7 +68,7 @@ const ButtonMain = ({ children, style, onClick }: ButtonMainProps) => {
   return (
     <ButtonContext.Provider value={{ ...state, setMouseOver, setMouseOut }}>
       <button
-        css={css(style)}
+        css={style}
         onMouseOver={setMouseOver}
         onMouseOut={setMouseOut}
         onClick={onClick}
@@ -89,6 +79,4 @@ const ButtonMain = ({ children, style, onClick }: ButtonMainProps) => {
   );
 };
 
-export const Button = Object.assign(ButtonMain, {
-  HoverIcon: ButtonHoverIcon,
-});
+export const Button = Object.assign(ButtonMain, {});

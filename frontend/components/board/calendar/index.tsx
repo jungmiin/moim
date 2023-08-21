@@ -1,80 +1,100 @@
 /* eslint-disable react/jsx-key */
-import { useState, useEffect, useCallback, ReactNode } from "react";
+import { useState, useEffect } from "react";
 import { css } from "@emotion/react";
-import styled from "@emotion/styled";
 import dayjs from "dayjs";
 import weekdayPlugin from "dayjs/plugin/weekday";
 import objectPlugin from "dayjs/plugin/toObject";
 import isTodayPlugin from "dayjs/plugin/isToday";
 import { common } from "@/styles/common";
 import Header from "./header";
+import { convertUserToDay } from "@/lib/dayConvert";
+import { Modal } from "@/components/common/modal";
 
 // TODO : 인터페이스 꼭 공통으로 빼내기
-
-interface WeekInterface {
-  dates: Array<DayInterface>;
-}
-
 interface DayInterface {
-  date: ReactNode;
-  month: Number;
-  year: Number;
-  isCurrentMonth: Boolean;
-  isCurrentDay: Boolean;
-  selectedPeople: Array<string>;
-}
-
-interface peopleInterface {
-  name: string;
-  color: string;
+  date: number;
+  month: number;
+  year: number;
+  isCurrentMonth: boolean;
+  isCurrentDay: boolean;
+  selectedPeople: Array<personInterface>;
   isSelected: boolean;
+  key: string;
+}
+interface personInterface {
+  _id: string;
+  userName: string;
+  userColor: string;
+  isSelected: boolean;
+  selectedDays?: Array<string>;
 }
 
-const Calendar = () => {
+const Calendar = ({
+  boardData,
+  setBoardData,
+}: {
+  boardData: any;
+  setBoardData: any;
+}) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
-  const [arrayOfDays, setArrayOfDays] = useState<Array<WeekInterface>>([]);
-  const [people, setPeople] = useState<Array<peopleInterface>>([
-    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
-    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
-    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
-    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
-    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
-    { name: "테스트", color: common.colors.primaryColor, isSelected: false },
-  ]);
-  const [isopenPeople, setOpenPeople] = useState(false);
-  const [selectedPeople, setSelectedPeople] = useState(-1);
+  const [arrayOfDays, setArrayOfDays] = useState<Array<DayInterface[]>>([]);
+  const [selectedDays, setSelectedDays] = useState<Array<string>>([]);
+  const [people, setPeople] = useState<Array<personInterface>>([]);
+  const [selectedPerson, setSelectedPerson] = useState<personInterface | null>(
+    null
+  );
+  const [isEditMode, setEditMode] = useState(false);
+  const [dateMap, setDateMap] = useState<{
+    [key: string]: {
+      possible: personInterface[];
+      impossible: personInterface[];
+    };
+  }>({});
+  const [modalInfo, setModalInfo] = useState<{
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+    date: string;
+    possible: personInterface[];
+    impossible: personInterface[];
+  } | null>(null);
 
   useEffect(() => {
-    const newPeople = people.map((person, i) => {
-      if (selectedPeople === i) return { ...person, isSelected: true };
-      return { ...person, isSelected: false };
-    });
-    setPeople(newPeople);
-  }, [selectedPeople]);
+    setPeople(boardData.users);
+    const newDateMap = convertUserToDay(boardData);
+    setDateMap(newDateMap);
+  }, [boardData, setBoardData]);
 
   dayjs.extend(weekdayPlugin);
   dayjs.extend(objectPlugin);
   dayjs.extend(isTodayPlugin);
 
-  const formatedDateObject = useCallback(
-    (date: dayjs.Dayjs) => {
-      const clonedObject = { ...date.toObject() };
+  const toggleEditMode = () => {
+    setEditMode(!isEditMode);
+    setSelectedPerson(null);
+    setSelectedDays([]);
+  };
 
-      const formatedObject = {
-        date: clonedObject.date,
-        month: clonedObject.months,
-        year: clonedObject.years,
-        isCurrentMonth: clonedObject.months === currentMonth.month(),
-        isCurrentDay: date.isToday(),
-        selectedPeople: [],
-      };
+  const formatedDateObject = (date: dayjs.Dayjs) => {
+    const clonedObject = { ...date.toObject() };
+    const formatedObject = {
+      date: clonedObject.date,
+      month: clonedObject.months,
+      year: clonedObject.years,
+      isCurrentMonth: clonedObject.months === currentMonth.month(),
+      isCurrentDay: date.isToday(),
+      selectedPeople: dateMap.hasOwnProperty(date.toString())
+        ? dateMap[date.toString()].possible
+        : [],
+      isSelected: selectedDays.includes(date.toString()) ? true : false,
+      key: date.toString(),
+    };
 
-      return formatedObject;
-    },
-    [currentMonth]
-  );
+    return formatedObject;
+  };
 
-  const getAllDays = useCallback(() => {
+  const getAllDays = () => {
     let currentDate = currentMonth.startOf("month").weekday(1);
     const nextMonth = currentMonth.add(1, "month").month();
 
@@ -88,7 +108,7 @@ const Calendar = () => {
       weekDates.push(formated);
 
       if (weekCounter === 7) {
-        allDates.push({ dates: weekDates });
+        allDates.push(weekDates);
         weekDates = [];
         weekCounter = 0;
       }
@@ -98,75 +118,148 @@ const Calendar = () => {
     }
 
     setArrayOfDays(allDates);
-  }, [currentMonth, formatedDateObject]);
+  };
 
   useEffect(() => {
     getAllDays();
-  }, [getAllDays, currentMonth]);
+  }, [currentMonth, selectedDays, dateMap]);
+
+  useEffect(() => {
+    renderDates();
+  }, [arrayOfDays]);
+
+  const selectDay = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.currentTarget as HTMLDivElement;
+    const date = target.id;
+    if (selectedDays.includes(date)) {
+      const newSelectedDays = selectedDays.filter((d) => d !== date);
+      setSelectedDays(newSelectedDays);
+    } else {
+      const newSelectedDays = [...selectedDays, date];
+      setSelectedDays(newSelectedDays);
+    }
+  };
 
   const renderDates = () => {
-    const rows: Array<JSX.Element> = [];
     let dates: Array<JSX.Element> = [];
-    arrayOfDays.forEach((week: WeekInterface) => {
-      week["dates"].forEach((d: DayInterface) => {
+    arrayOfDays.forEach((week: DayInterface[], weekIndex: number) => {
+      week.forEach((d: DayInterface, dateIndex: number) => {
         dates.push(
-          <Date className={d.isCurrentMonth ? "" : "previous"}>
-            <span>{d.date}</span>
-          </Date>
+          <div
+            id={d.key}
+            key={weekIndex * 7 + dateIndex}
+            css={dateStyle}
+            style={
+              d.selectedPeople.length > 0 || (d.isCurrentMonth && isEditMode)
+                ? { cursor: "pointer" }
+                : { cursor: "default" }
+            }
+            className={`${d.isCurrentMonth ? "current" : "not-current"} ${
+              isEditMode && (d.isSelected ? "selected" : "not-selected")
+            }`}
+            onClick={(e) => {
+              isEditMode
+                ? d.isCurrentMonth && selectDay(e)
+                : d.selectedPeople.length > 0 &&
+                  Modal.handle({ e, setModalInfo, dateMap });
+            }}
+            onMouseOver={(e) => {
+              !isEditMode &&
+                d.selectedPeople.length > 0 &&
+                Modal.handle({ e, setModalInfo, dateMap });
+            }}
+            onMouseLeave={(e) => {
+              !isEditMode && d.selectedPeople.length > 0 && setModalInfo(null);
+            }}
+          >
+            {d.date}
+            <div
+              css={css`
+                display: flex;
+                margin-top: 0.2rem;
+                gap: 0.1rem;
+                flex-flow: wrap;
+              `}
+            >
+              {d.selectedPeople.map((person, index) => (
+                <div
+                  key={index}
+                  css={selectPeopleCss}
+                  style={{ backgroundColor: person.userColor }}
+                ></div>
+              ))}
+            </div>
+          </div>
         );
       });
-      rows.push(<Week>{dates}</Week>);
-      dates = [];
     });
-    return <Dates>{rows}</Dates>;
+    return (
+      <div css={datesStyle}>
+        {dates}
+        {modalInfo && <Modal modalInfo={modalInfo} />}
+      </div>
+    );
   };
 
   return (
     <>
       <Header
+        boardData={boardData}
+        setBoardData={setBoardData}
         currentMonth={currentMonth}
         setCurrentMonth={setCurrentMonth}
         people={people}
-        selectedPeople={selectedPeople}
-        setSelectedPeople={setSelectedPeople}
+        isEditMode={isEditMode}
+        toggleEditMode={toggleEditMode}
+        selectedPerson={selectedPerson}
+        setSelectedPerson={setSelectedPerson}
+        selectedDays={selectedDays}
+        setSelectedDays={setSelectedDays}
       />
       {renderDates()}
     </>
   );
 };
 
-const datesCss = css`
-  width: 100%;
-`;
-const Dates = styled.div`
-  ${datesCss}
+const selectPeopleCss = css`
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.3rem;
 `;
 
-const dateCss = css`
+const datesStyle = css`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 1px;
+`;
+
+const dateStyle = css`
   width: 3.6rem;
   height: 3.6rem;
-  border: ${common.colors.tenaryGrey} 1px solid;
   font-size: 0.5rem;
   font-weight: 700;
   padding: 0.75rem;
-  &.previous {
+  box-shadow: 0 0 0 1px ${common.colors.tenaryGrey};
+  &.not-current {
     color: ${common.colors.secondaryGrey};
   }
-`;
-const Date = styled.div`
-  ${dateCss}
-`;
-
-const weekCss = css`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-`;
-const Week = styled.div`
-  ${weekCss}
+  &.not-selected {
+    color: ${common.colors.secondaryGrey};
+    &.not-current {
+      color: ${common.colors.tenaryGrey};
+    }
+  }
+  &.selected {
+    color: ${common.colors.primaryColor};
+    background-color: ${common.colors.tenaryColor};
+  }
+  &:before {
+    border: ${common.colors.tenaryGrey} 1px solid;
+  }
+  &:after {
+    border: ${common.colors.tenaryGrey} 1px solid;
+  }
 `;
 
 export default Calendar;

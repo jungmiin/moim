@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { createContext, useContext, ReactNode, useReducer } from "react";
-import { css } from "@emotion/react";
+import { css, SerializedStyles } from "@emotion/react";
 
 interface dropdownContextInterfcae {
   open: boolean;
@@ -43,7 +43,7 @@ const useDropdownContext = (component: string) => {
 
 interface dropdownMainProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const DropdownMain = ({ children, style }: dropdownMainProps) => {
@@ -55,20 +55,20 @@ const DropdownMain = ({ children, style }: dropdownMainProps) => {
 
   return (
     <DropdownContext.Provider value={{ ...state, toggle }}>
-      <div css={css(style)}>{children}</div>
+      <div css={style}>{children}</div>
     </DropdownContext.Provider>
   );
 };
 
 interface dropdownTriggerProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const DropdownTrigger = ({ children, style }: dropdownTriggerProps) => {
   const { toggle } = useDropdownContext("Dropdown.Trigger");
   return (
-    <div css={css(style)} onClick={toggle}>
+    <div css={style} onClick={toggle}>
       {children}
     </div>
   );
@@ -76,7 +76,7 @@ const DropdownTrigger = ({ children, style }: dropdownTriggerProps) => {
 
 interface dropdownTriggerAndHideProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const DropdownTriggerAndHide = ({
@@ -87,7 +87,7 @@ const DropdownTriggerAndHide = ({
   return (
     <>
       {!open && (
-        <div css={css(style)} onClick={toggle}>
+        <div css={style} onClick={toggle}>
           {children}
         </div>
       )}
@@ -97,21 +97,21 @@ const DropdownTriggerAndHide = ({
 
 interface DropdownMenuProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const DropdownMenu = ({ children, style }: DropdownMenuProps) => {
   const { open } = useDropdownContext("Dropdown.Menu");
-  return <>{open && <div css={css(style)}>{children}</div>}</>;
+  return <>{open && <div css={style}>{children}</div>}</>;
 };
 
 interface DropdownItemProps {
   children?: ReactNode;
-  style?: string;
+  style?: SerializedStyles;
 }
 
 const DropdownItem = ({ children, style }: DropdownItemProps) => {
-  return <div css={css(style)}>{children}</div>;
+  return <div css={style}>{children}</div>;
 };
 
 export const Dropdown = Object.assign(DropdownMain, {

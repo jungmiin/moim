@@ -2,8 +2,29 @@ import { Form } from "../common/form";
 import { Button } from "../common/button";
 import { Dropdown } from "../common/dropdown";
 import { common } from "@/styles/common";
+import Router from "next/router";
+import { css } from "@emotion/react";
 
 export const MoimNameDropdown = () => {
+  const generateNewBoard = async (input: string) => {
+    console.log("test", input);
+    const response = await fetch("/api/board", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        boardName: input,
+      }),
+    });
+    if (response.status === 200) {
+      const { boardUrl } = await response.json();
+      Router.push(`/board/${boardUrl}`);
+    } else {
+      throw new Error("POST /board");
+    }
+  };
+
   return (
     <Dropdown>
       <Dropdown.TriggerAndHide style={buttonStyle}>
@@ -15,14 +36,16 @@ export const MoimNameDropdown = () => {
             style={formInputStyle}
             placeholder="모임 명을 입력해주세요."
           />
-          <Form.Submit style={formRightButtonStyle}>만들기</Form.Submit>
+          <Form.Submit style={formRightButtonStyle} onSubmit={generateNewBoard}>
+            만들기
+          </Form.Submit>
         </Form>
       </Dropdown.Menu>
     </Dropdown>
   );
 };
 
-const formStyle = `
+const formStyle = css`
   opacity: 100;
   background-color: white;
   font-size: 0.75rem;
@@ -36,7 +59,7 @@ const formStyle = `
   z-index: 5;
 `;
 
-const formRightButtonStyle = `
+const formRightButtonStyle = css`
   font-weight: 700;
   color: ${common.colors.primaryColor};
   margin-right: 1rem;
@@ -49,7 +72,7 @@ const formRightButtonStyle = `
   }
 `;
 
-const formInputStyle = `
+const formInputStyle = css`
   width: 100%;
   margin: 0 1rem;
   &::placeholder {
@@ -57,7 +80,7 @@ const formInputStyle = `
   }
 `;
 
-const buttonStyle = `
+const buttonStyle = css`
   position: relative;
   display: flex;
   justify-content: center;
