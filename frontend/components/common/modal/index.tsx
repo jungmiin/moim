@@ -44,14 +44,18 @@ const modalHandle = ({
   const rect = target.getBoundingClientRect();
   const height = window.innerHeight;
   const width = window.innerWidth;
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
   setModalInfo({
     left: width / 2 > rect.x + rect.width / 2 ? rect.left + 10 : 0,
     right: width / 2 <= rect.x + rect.width / 2 ? width - rect.right + 10 : 0,
     top:
-      height / 2 > rect.y + rect.height / 2 ? rect.top + rect.height + 10 : 0,
+      height / 2 > rect.y + rect.height / 2
+        ? rect.top + scrollY + rect.height + 10
+        : 0,
     bottom:
       height / 2 <= rect.y + rect.height / 2
-        ? height - rect.bottom + rect.height + 10
+        ? height - rect.bottom - scrollY + rect.height + 10
         : 0,
     date: date,
     possible: dateMap[date].possible,
