@@ -95,25 +95,28 @@ const Calendar = ({
   };
 
   const getAllDays = () => {
-    let currentDate = currentMonth.startOf("month").weekday(1);
+    // 달의 시작 요일이 일요일이라면, 그 주 월요일(저번달) 부터 받아옴.
+    let currentDate =
+      currentMonth.startOf("month").weekday() === 0
+        ? currentMonth.startOf("month").weekday(-6)
+        : currentMonth.startOf("month").weekday(1);
+    // 다음 달
     const nextMonth = currentMonth.add(1, "month").month();
 
     let allDates = [];
     let weekDates = [];
+    let weekCounter = 0;
 
-    let weekCounter = 1;
-
+    // 해당 주 월요일이 다음 달이 아닐 때까지
     while (currentDate.weekday(-6).toObject().months !== nextMonth) {
       const formated = formatedDateObject(currentDate);
       weekDates.push(formated);
-
+      weekCounter++;
       if (weekCounter === 7) {
         allDates.push(weekDates);
         weekDates = [];
         weekCounter = 0;
       }
-
-      weekCounter++;
       currentDate = currentDate.add(1, "day");
     }
 
