@@ -121,7 +121,6 @@ const wrapperCss = css`
   flex-direction: column;
   padding: 0 2rem;
   max-width: 17rem;
-  max-height: 80vh;
   overflow-x: hidden;
   overflow-y: auto;
   &::-webkit-scrollbar {
