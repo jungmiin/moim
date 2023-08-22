@@ -56,31 +56,34 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
     return (
       <>
         {optimalDate !== null && (
-          <List.Item
-            css={listStyle}
-            index={optimalDate.date.toString()}
-            onMouseOver={(e: any) => Modal.handle({ e, setModalInfo, dateMap })}
-            onMouseOut={(e: any) => setModalInfo(null)}
-          >
-            <span css={dateLabelStyle}>제일 좋은 날짜는</span>
-            <span css={optimalDateWrapperStyle}>
-              <span css={optimalDateStyle}>
+          <List.Item css={listCss} index={optimalDate.date.toString()}>
+            <span css={dateLabelCss}>제일 좋은 날짜는</span>
+            <span css={optimalDateWrapperCss}>
+              <span css={optimalDateCss}>
                 {optimalDate.date
                   .locale("ko")
                   .format("YYYY년 MM월 DD일 ddd요일")}
               </span>
               이에요!
             </span>
-            <span css={statusStyle}>
+            <span css={statusCss}>
               가능한 사람
-              <span css={peopleCountStyle}>
-                {optimalDate.possible.length}명
-              </span>
-              <div css={lineStyle}></div>
+              <span css={peopleCountCss}>{optimalDate.possible.length}명</span>
+              <div css={lineCss} />
               불가능한 사람
-              <span css={peopleCountStyle}>
+              <span css={peopleCountCss}>
                 {optimalDate.impossible.length}명
               </span>
+              <button
+                id={optimalDate.date.toString()}
+                css={detailButtonCss}
+                onMouseOver={(e: any) =>
+                  Modal.handle({ e, setModalInfo, dateMap })
+                }
+                onMouseOut={(e: any) => setModalInfo(null)}
+              >
+                자세히 보기
+              </button>
             </span>
           </List.Item>
         )}
@@ -91,26 +94,28 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
   const renderOtherCards = () => {
     return (
       <>
-        <div css={otherDateLabelStyle}>이 날짜는 어떤가요?</div>
+        <div css={otherDateLabelCss}>이 날짜는 어떤가요?</div>
         {otherDate !== null &&
           otherDate.map((date, index) => (
-            <List.Item
-              css={listStyle}
-              key={index}
-              index={date.date.toString()}
-              onMouseOver={(e: any) =>
-                Modal.handle({ e, setModalInfo, dateMap })
-              }
-              onMouseOut={(e: any) => setModalInfo(null)}
-            >
-              <span css={otherDateStyle}>
+            <List.Item css={listCss} key={index} index={date.date.toString()}>
+              <span css={otherDateCss}>
                 {date.date.locale("ko").format("YYYY년 MM월 DD일 ddd요일")}
               </span>
-              <span css={statusStyle}>
+              <span css={statusCss}>
                 가능한 사람{" "}
-                <span css={peopleCountStyle}>{date.possible.length}명</span>{" "}
-                <div css={lineStyle}></div> 불가능한 사람{" "}
-                <span css={peopleCountStyle}>{date.impossible.length}명</span>
+                <span css={peopleCountCss}>{date.possible.length}명</span>{" "}
+                <div css={lineCss}></div> 불가능한 사람{" "}
+                <span css={peopleCountCss}>{date.impossible.length}명</span>
+                <button
+                  id={date.date.toString()}
+                  css={detailButtonCss}
+                  onMouseOver={(e: any) =>
+                    Modal.handle({ e, setModalInfo, dateMap })
+                  }
+                  onMouseOut={(e: any) => setModalInfo(null)}
+                >
+                  자세히 보기
+                </button>
               </span>
             </List.Item>
           ))}
@@ -132,26 +137,41 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
       {result.length > 0 ? (
         renderCardList()
       ) : (
-        <div css={noDateStyle}>
-          <div css={titleStyle}>아직 선택한 날짜가 없어요.</div>
-          <div css={descStyle}>인원을 추가한 뒤 날짜를 선택해주세요.</div>
+        <div css={noDateCss}>
+          <div css={titleCss}>아직 선택한 날짜가 없어요.</div>
+          <div css={descCss}>인원을 추가한 뒤 날짜를 선택해주세요.</div>
         </div>
       )}
     </>
   );
 };
 
-const dateLabelStyle = css`
+const detailButtonCss = css`
+  margin-left: auto;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid ${common.colors.primaryColor};
+  color: ${common.colors.primaryColor};
+  border-radius: 1rem;
+  font-size: 0.48rem;
+  transition: all 0.2s linear 0s;
+  &:hover {
+    background-color: ${common.colors.primaryColor};
+    color: white;
+    cursor: pointer;
+  }
+`;
+
+const dateLabelCss = css`
   font-size: 0.58rem;
   margin-bottom: 0.4rem;
 `;
 
-const optimalDateWrapperStyle = css`
+const optimalDateWrapperCss = css`
   display: flex;
   font-size: 0.83rem;
 `;
 
-const optimalDateStyle = css`
+const optimalDateCss = css`
   font-weight: 700;
   background: ${common.gradient.secondaryGradient};
   background-size: 300% 300%;
@@ -172,38 +192,40 @@ const optimalDateStyle = css`
   }
 `;
 
-const statusStyle = css`
+const statusCss = css`
   display: flex;
   font-size: 0.58rem;
+  align-items: center;
 `;
 
-const lineStyle = css`
-  width: 0.1rem;
+const lineCss = css`
+  width: 0.05rem;
+  height: 0.64rem;
   background-color: ${common.colors.tenaryGrey};
   margin: 0 0.2rem;
 `;
 
-const peopleCountStyle = css`
+const peopleCountCss = css`
   font-weight: 700;
   color: ${common.colors.primaryColor};
   margin-left: 0.2rem;
 `;
 
-const otherDateLabelStyle = css`
+const otherDateLabelCss = css`
   font-size: 0.67rem;
   font-weight: 700;
   color: ${common.colors.primaryColor};
   margin-bottom: 0.8rem;
 `;
 
-const otherDateStyle = css`
+const otherDateCss = css`
   display: flex;
   font-size: 0.67rem;
   font-weight: 700;
   margin-bottom: 0.6rem;
 `;
 
-const listStyle = css`
+const listCss = css`
   padding: 1rem;
   background: white;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.04);
@@ -212,13 +234,10 @@ const listStyle = css`
   margin-bottom: 1rem;
   width: 15rem;
   transition: all 0.2s linear 0s;
-  &:hover {
-    background: ${common.colors.tenaryColor};
-    cursor: pointer;
-  }
+  cursor: default;
 `;
 
-const noDateStyle = css`
+const noDateCss = css`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -226,13 +245,13 @@ const noDateStyle = css`
   padding-top: 12rem;
 `;
 
-const titleStyle = css`
+const titleCss = css`
   font-weight: 700;
   font-size: 0.8rem;
   margin-bottom: 0.4rem;
 `;
 
-const descStyle = css`
+const descCss = css`
   font-size: 0.67rem;
   color: ${common.colors.primaryGrey};
 `;
