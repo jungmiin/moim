@@ -1,5 +1,4 @@
 import { Form } from "../common/form";
-import { Button } from "../common/button";
 import { Dropdown } from "../common/dropdown";
 import { common } from "@/styles/common";
 import Router from "next/router";
@@ -28,7 +27,7 @@ export const MoimNameDropdown = () => {
   return (
     <Dropdown>
       <Dropdown.TriggerAndHide style={buttonStyle}>
-        <Button>모임 만들기</Button>
+        <button>모임 만들기</button>
       </Dropdown.TriggerAndHide>
       <Dropdown.Menu>
         <Form style={formStyle}>
