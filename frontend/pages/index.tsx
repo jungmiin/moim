@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { common } from "@/styles/common";
 import MainWrapper from "@/components/main/main";
 import CanvasWrapper from "@/components/main/canvas";
+import Script from "next/script";
 
 const Home = () => {
   const mouse = useRef<number[]>([0, 0]);
@@ -14,6 +15,10 @@ const Home = () => {
   return (
     <>
       <Index onPointerMove={handleMouseMove}>
+        <Script
+          src="https://kit.fontawesome.com/f970c48591.js"
+          crossOrigin="anonymous"
+        ></Script>
         <MainWrapper />
         <CanvasWrapper mouse={mouse} />
       </Index>
