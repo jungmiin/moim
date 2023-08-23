@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import { Toast } from "./_toast";
 
 export default function Document() {
   return (
@@ -7,7 +6,7 @@ export default function Document() {
       <Head />
       <body>
         <Main />
-        <Toast />
+        <div id="__toast"></div>
         <NextScript />
       </body>
     </Html>

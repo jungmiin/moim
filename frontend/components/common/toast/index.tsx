@@ -8,17 +8,13 @@ interface Message {
 }
 
 class Toast {
-  #toast: Root | null;
+  #toast: Root;
   #messages: Message[];
   #defaultDuration: number;
 
   constructor() {
-    if (typeof document !== undefined) {
-      const toast = document.getElementById("__toast");
-      this.#toast = createRoot(toast!);
-    } else {
-      this.#toast = null;
-    }
+    const toast = document.querySelector("#__toast") as HTMLElement;
+    this.#toast = createRoot(toast);
     this.#messages = [];
     this.#defaultDuration = 3000;
   }
@@ -34,18 +30,16 @@ class Toast {
   }
 
   #close(closeID: string) {
-    if (this.#toast) {
-      const index = this.#messages.findIndex(({ id }) => id === closeID);
-      this.#messages.splice(index, 1);
-      this.#toast.render(
-        <Message messages={this.#messages} close={this.#close.bind(this)} />
-      );
-    }
+    const index = this.#messages.findIndex(({ id }) => id === closeID);
+    this.#messages.splice(index, 1);
+    this.#toast.render(
+      <Message messages={this.#messages} close={this.#close.bind(this)} />
+    );
   }
 
   message(message: string, duration = this.#defaultDuration) {
     const uuid = v4();
-    if (this.#toast && this.#messages.length < 3) {
+    if (this.#messages.length < 3) {
       this.#messages.push({
         id: uuid,
         message,
