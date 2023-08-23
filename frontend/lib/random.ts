@@ -1,5 +1,4 @@
 // 파스텔 톤의 색상 생성
-
 const hslToHex = (h: number, s: number, l: number) => {
   l /= 100;
   const a = (s * Math.min(l, 1 - l)) / 100;

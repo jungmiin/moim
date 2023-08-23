@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import { common } from "@/styles/common";
 import { Form } from "../../common/form";
 import { List } from "../../common/list";
-import { getRandomPastelColor } from "@/lib/randomColor";
+import { getRandomPastelColor } from "@/lib/random";
 interface addPeoplePropsInterface {
   toggleAddPeople: MouseEventHandler;
   boardData: any;

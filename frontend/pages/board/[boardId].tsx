@@ -4,11 +4,17 @@ import ResultWrapper from "@/components/board/resultWrapper";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { common } from "@/styles/common";
-import Script from "next/script";
+import Toast from "@/components/common/toast";
 
 const Board = () => {
   const router = useRouter();
   const [boardData, setBoardData] = useState();
+  const [toast, setToast] = useState<Toast | null>(null);
+
+  useEffect(() => {
+    const newToast = new Toast();
+    setToast(newToast);
+  }, []);
 
   // 초기 board 데이터 받아옴
   useEffect(() => {
@@ -36,6 +42,7 @@ const Board = () => {
           css={shareButtonCss}
           onClick={() => {
             navigator.clipboard.writeText(location.href);
+            toast && toast.message("링크가 복사되었어요!");
           }}
         >
           모임 링크 공유하기
@@ -53,7 +60,7 @@ const shareButtonCss = css`
   background: ${common.gradient.secondaryGradient};
   color: ${common.colors.tenaryColor};
   transition: all 0.2s linear;
-  z-index: 100;
+  z-index: 2;
   position: fixed;
   bottom: 2rem;
   &::before {
