@@ -4,18 +4,12 @@ import ResultWrapper from "@/components/board/resultWrapper";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { common } from "@/styles/common";
-import Toast from "@/components/common/toast";
+import { useToast } from "@/components/common/toast/context";
 
 const Board = () => {
   const router = useRouter();
   const [boardData, setBoardData] = useState();
-  const [toast, setToast] = useState<Toast | null>(null);
-
-  useEffect(() => {
-    const newToast = new Toast();
-    setToast(newToast);
-  }, []);
-
+  const toast = useToast();
   // 초기 board 데이터 받아옴
   useEffect(() => {
     if (!router.isReady) return;

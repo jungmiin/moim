@@ -9,6 +9,8 @@ import { common } from "@/styles/common";
 import Header from "./header";
 import { convertUserToDay } from "@/lib/dayConvert";
 import { Modal } from "@/components/common/modal";
+import Toast from "@/components/common/toast";
+import { useToast } from "@/components/common/toast/context";
 
 // TODO : 인터페이스 꼭 공통으로 빼내기
 interface DayInterface {
@@ -60,11 +62,22 @@ const Calendar = ({
     impossible: personInterface[];
   } | null>(null);
 
+  const toast = useToast();
+
   useEffect(() => {
     setPeople(boardData.users);
     const newDateMap = convertUserToDay(boardData);
     setDateMap(newDateMap);
   }, [boardData, setBoardData]);
+
+  useEffect(() => {
+    const newArrayOfDays = getAllDays();
+    setArrayOfDays(newArrayOfDays);
+  }, [currentMonth, selectedDays, dateMap]);
+
+  useEffect(() => {
+    renderDates();
+  }, [arrayOfDays]);
 
   dayjs.extend(weekdayPlugin);
   dayjs.extend(objectPlugin);
@@ -103,7 +116,7 @@ const Calendar = ({
     // 다음 달
     const nextMonth = currentMonth.add(1, "month").month();
 
-    let allDates = [];
+    let allDays = [];
     let weekDates = [];
     let weekCounter = 0;
 
@@ -113,23 +126,15 @@ const Calendar = ({
       weekDates.push(formated);
       weekCounter++;
       if (weekCounter === 7) {
-        allDates.push(weekDates);
+        allDays.push(weekDates);
         weekDates = [];
         weekCounter = 0;
       }
       currentDate = currentDate.add(1, "day");
     }
 
-    setArrayOfDays(allDates);
+    return allDays;
   };
-
-  useEffect(() => {
-    getAllDays();
-  }, [currentMonth, selectedDays, dateMap]);
-
-  useEffect(() => {
-    renderDates();
-  }, [arrayOfDays]);
 
   const selectDay = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.currentTarget as HTMLDivElement;
@@ -161,10 +166,14 @@ const Calendar = ({
               isEditMode && (d.isSelected ? "selected" : "not-selected")
             }`}
             onClick={(e) => {
-              isEditMode
-                ? d.isCurrentMonth && selectDay(e)
-                : d.selectedPeople.length > 0 &&
-                  Modal.handle({ e, setModalInfo, dateMap });
+              if (isEditMode) {
+                if (d.isCurrentMonth && selectedPerson) {
+                  selectDay(e);
+                } else {
+                  toast &&
+                    toast.message("사람을 선택해야 날짜를 선택할 수 있어요.");
+                }
+              }
             }}
             onMouseOver={(e) => {
               !isEditMode &&
