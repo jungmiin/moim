@@ -49,7 +49,7 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
 
   useEffect(() => {
     setOptimalDate(result[0]);
-    setOtherDate(result.slice(1));
+    setOtherDate(result.slice(1, 5));
   }, [result]);
 
   const renderOptimalCard = () => {

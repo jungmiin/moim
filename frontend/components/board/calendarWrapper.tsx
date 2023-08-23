@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 import Calendar from "./calendar";
 import { common } from "@/styles/common";
 import { Alata } from "@next/font/google";
-import Script from "next/script";
 
 const alata = Alata({ weight: ["400"], preload: false });
 
@@ -15,10 +14,6 @@ const CalendarWrapper = ({
 }) => {
   return (
     <div>
-      <Script
-        src="https://kit.fontawesome.com/f970c48591.js"
-        crossOrigin="anonymous"
-      ></Script>
       <span css={boardNameWrapperStyle}>
         <span css={moimStyle}>moim</span>
         <span>

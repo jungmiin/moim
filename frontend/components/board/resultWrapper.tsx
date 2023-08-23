@@ -5,8 +5,6 @@ import EditPeople from "@/components/board/result/editPeople";
 import { common } from "@/styles/common";
 import CardList from "./result/cardList";
 import { convertUserToDay } from "@/lib/dayConvert";
-import Script from "next/script";
-
 interface personInterface {
   _id: string;
   userName: string;
@@ -65,10 +63,6 @@ const ResultWrapper = ({
 
   return (
     <>
-      <Script
-        src="https://kit.fontawesome.com/f970c48591.js"
-        crossOrigin="anonymous"
-      ></Script>
       {isAddPeople ? (
         <div css={wrapperCss}>
           <EditPeople
