@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-key */
+/** @jsxImportSource @emotion/react */
 import { SetStateAction, Dispatch } from "react";
 import { css } from "@emotion/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -96,34 +96,6 @@ const Header = ({
     return `${currentMonth.year()}년 ${currentMonth.month() + 1}월`;
   };
 
-  const getBadgeStyle = (person: personInterface) => {
-    return css`
-      display: flex;
-      align-items: center;
-      font-size: 0.67rem;
-      padding: 0.25rem 0.67rem;
-      border-radius: 1rem;
-      margin: 0.2rem 0.05rem;
-      cursor: pointer;
-      .fa {
-        margin-right: 0.4rem;
-        cursor: pointer;
-      }
-      background-color: white;
-      color: ${person.userColor};
-      box-shadow: 0 0 0 1px ${person.userColor} inset;
-      &.not-selected {
-        background-color: white;
-        color: ${person.userColor};
-        box-shadow: 0 0 0 1px ${person.userColor} inset;
-      }
-      &.selected {
-        background-color: ${person.userColor};
-        color: white;
-      }
-    `;
-  };
-
   const selectBadge = (person: personInterface) => {
     setSelectedPerson(person);
     const user = boardData.users.find((user: any) => user._id === person._id);
@@ -144,18 +116,9 @@ const Header = ({
         </div>
         <div css={badgeWrapperCss}>
           {
-            <Dropdown
-              style={css`
-                display: flex;
-              `}
-            >
+            <Dropdown className={"dropdown"} css={dropdownCss}>
               <Dropdown.Menu>
-                <List
-                  style={{
-                    display: "flex",
-                    marginRight: "0.4rem",
-                  }}
-                >
+                <List className={"list"} css={listCss}>
                   {people.map((person) => {
                     return (
                       <List.Item
@@ -168,7 +131,7 @@ const Header = ({
                             ? "selected"
                             : "not-selected"
                         }`}
-                        css={getBadgeStyle(person)}
+                        css={badgeCss(person)}
                         onClick={(e: EventTarget) => selectBadge(person)}
                       >
                         {person.userName}
@@ -204,6 +167,55 @@ const Header = ({
     </>
   );
 };
+
+const dropdownCss = css`
+  display: flex;
+`;
+
+const badgeCss = (person: personInterface) => css`
+  display: flex;
+  align-items: center;
+  font-size: 0.67rem;
+  padding: 0.25rem 0.67rem;
+  border-radius: 1rem;
+  margin: 0.2rem 0.05rem;
+  cursor: pointer;
+  .fa {
+    margin-right: 0.4rem;
+    cursor: pointer;
+  }
+  background-color: white;
+  color: ${person.userColor};
+  box-shadow: 0 0 0 1px ${person.userColor} inset;
+  &.not-selected {
+    background-color: white;
+    color: ${person.userColor};
+    box-shadow: 0 0 0 1px ${person.userColor} inset;
+  }
+  &.selected {
+    background-color: ${person.userColor};
+    color: white;
+  }
+`;
+
+const listCss = css`
+  width: 26rem;
+  display: flex;
+  margin-right: 0.4rem;
+  white-space: nowrap;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    height: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${common.colors.tenaryGrey};
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 3px;
+  }
+`;
 
 const buttonCss = css`
   padding: 0.1rem 0.8rem;
