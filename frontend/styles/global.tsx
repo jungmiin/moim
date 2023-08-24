@@ -6,7 +6,7 @@ export const globalStyles = (
       /* Smartphones (landscape) ----------- */
       @media only screen and (min-width: 321px) {
         :root {
-          font-size: 12px;
+          font-size: 8px;
         }
       }
 
@@ -20,28 +20,28 @@ export const globalStyles = (
       /* iPads (landscape) ----------- */
       @media only screen and (min-width: 1025px) {
         :root {
-          font-size: 20px;
+          font-size: 16px;
         }
       }
 
       /* iPads (portrait) ----------- */
       @media only screen and (min-width: 768px) and (max-width: 1024px) {
         :root {
-          font-size: 16px;
+          font-size: 12px;
         }
       }
 
       /* Desktops and laptops ----------- */
-      @media only screen and (min-width: 1224px) and (max-width: 1823px) {
+      @media only screen and (min-width: 1224px) and (max-width: 1920px) {
         :root {
-          font-size: 24px;
+          font-size: 20px;
         }
       }
 
       /* Large screens ----------- */
-      @media only screen and (min-width: 1824px) {
+      @media only screen and (min-width: 1921px) {
         :root {
-          font-size: 28px;
+          font-size: 24px;
         }
       }
 

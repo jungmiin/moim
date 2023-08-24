@@ -42,11 +42,18 @@ const useDropdownContext = (component: string) => {
 };
 
 interface dropdownMainProps {
+  className?: string;
+  css?: SerializedStyles;
   children?: ReactNode;
-  style?: SerializedStyles;
+  style?: object;
 }
 
-const DropdownMain = ({ children, style }: dropdownMainProps) => {
+const DropdownMain = ({
+  children,
+  css,
+  style,
+  className,
+}: dropdownMainProps) => {
   const [state, dispatch] = useReducer(dropdownReducer, { open: false });
 
   const toggle = () => {
@@ -55,7 +62,9 @@ const DropdownMain = ({ children, style }: dropdownMainProps) => {
 
   return (
     <DropdownContext.Provider value={{ ...state, toggle }}>
-      <div css={style}>{children}</div>
+      <div className={className} css={css} style={style}>
+        {children}
+      </div>
     </DropdownContext.Provider>
   );
 };

@@ -1,18 +1,21 @@
-/** @jsxImportSource @emotion/react */
-import { createContext, useContext, ReactNode, useReducer } from "react";
-import { css, SerializedStyles } from "@emotion/react";
+import { ReactNode, useEffect } from "react";
+import { SerializedStyles } from "@emotion/react";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface listMainProps {
+  className?: string;
   children?: ReactNode;
   style?: object;
   css?: SerializedStyles;
 }
 
-const ListMain = ({ children, style, css }: listMainProps) => {
+const ListMain = ({ className, children, style, css }: listMainProps) => {
+  useEffect(() => {
+    console.log(className, children, style, css);
+  }, []);
   return (
-    <div css={css} style={style}>
+    <div className={className} css={css} style={style}>
       {children}
     </div>
   );

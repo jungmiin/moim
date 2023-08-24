@@ -91,7 +91,7 @@ const shareButtonCss = css`
 
 const wrapperCss = css`
   display: flex;
-  margin-top: 3.6rem;
+  margin: 3.6rem 0;
   justify-content: center;
   width: 100vw;
 `;
