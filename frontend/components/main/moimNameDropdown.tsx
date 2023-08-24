@@ -3,10 +3,15 @@ import { Dropdown } from "../common/dropdown";
 import { common } from "@/styles/common";
 import Router from "next/router";
 import { css } from "@emotion/react";
+import { Dispatch, SetStateAction } from "react";
 
-export const MoimNameDropdown = () => {
+export const MoimNameDropdown = ({
+  setLoading,
+}: {
+  setLoading: Dispatch<SetStateAction<boolean>>;
+}) => {
   const generateNewBoard = async (input: string) => {
-    console.log("test", input);
+    setLoading(true);
     const response = await fetch("/api/board", {
       method: "POST",
       headers: {
@@ -22,6 +27,7 @@ export const MoimNameDropdown = () => {
     } else {
       throw new Error("POST /board");
     }
+    setLoading(false);
   };
 
   return (
