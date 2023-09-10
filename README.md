@@ -5,7 +5,7 @@
 <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/> <img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"/> <img src="https://img.shields.io/badge/emotion-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white"/> <img src="https://img.shields.io/badge/three.js-000000?style=for-the-badge&logo=threedotjs&logoColor=white"> 
 <img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
 
-[**💻 데모 바로가기**](https://moim-sandy.vercel.app/)
+[**💻 데모 바로가기**](https://with-moim.vercel.app)
 
 ### 👫 정하고 싶은 일정이 있을 때마다 모임을 만들 수 있어요.
 
