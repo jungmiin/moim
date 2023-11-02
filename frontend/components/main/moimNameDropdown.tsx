@@ -3,13 +3,15 @@ import { Dropdown } from "../common/dropdown";
 import { common } from "@/styles/common";
 import Router from "next/router";
 import { css } from "@emotion/react";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export const MoimNameDropdown = ({
   setLoading,
 }: {
   setLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const [moimName, setMoimName] = useState("");
+
   const generateNewBoard = async (input: string) => {
     setLoading(true);
     const response = await fetch("/api/board", {
@@ -41,8 +43,15 @@ export const MoimNameDropdown = ({
             style={formInputStyle}
             placeholder="모임 이름을 입력해주세요."
             onSubmit={generateNewBoard}
+            onChange={setMoimName}
+            input={moimName}
           />
-          <Form.Submit style={formRightButtonStyle} onSubmit={generateNewBoard}>
+          <Form.Submit
+            style={formRightButtonStyle}
+            onSubmit={generateNewBoard}
+            disabled={moimName === ""}
+            input={moimName}
+          >
             만들기
           </Form.Submit>
         </Form>

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import {
   createContext,
   useContext,
@@ -7,55 +6,7 @@ import {
   KeyboardEvent,
   useReducer,
 } from "react";
-import { css, SerializedStyles } from "@emotion/react";
-
-interface formContextInterface {
-  input: string;
-  changeInput: (e?: ChangeEvent<HTMLInputElement> | undefined) => void;
-  open: boolean;
-  toggleForm: () => void;
-}
-
-interface formStateInterface {
-  input: string;
-  open: boolean;
-}
-
-interface formActionInterface {
-  type: string;
-  value?: string;
-}
-
-const formContext = createContext<formContextInterface | null>(null);
-
-const formReducer = (
-  state: formStateInterface,
-  action: formActionInterface
-) => {
-  switch (action.type) {
-    case "TOGGLE":
-      return { ...state, open: !open };
-    case "INPUT":
-      if (action.value !== undefined) {
-        return { ...state, input: action.value };
-      }
-      return state;
-    default:
-      return state;
-  }
-};
-
-const useFormContext = (component: string) => {
-  let context = useContext(formContext);
-  if (context === null) {
-    let err = new Error(
-      `<${component} />의 부모 컴포넌트 <Form />이 존재하지 않음.`
-    );
-    if (Error.captureStackTrace) Error.captureStackTrace(err, useFormContext);
-    throw err;
-  }
-  return context;
-};
+import { SerializedStyles } from "@emotion/react";
 
 interface formMainProps {
   children?: ReactNode;
@@ -63,30 +14,7 @@ interface formMainProps {
 }
 
 const FormMain = ({ children, style }: formMainProps) => {
-  const [state, dispatch] = useReducer(formReducer, { input: "", open: true });
-  const changeInput = (e?: ChangeEvent<HTMLInputElement> | undefined) => {
-    e
-      ? dispatch({
-          type: "INPUT",
-          value: e.target.value,
-        })
-      : dispatch({
-          type: "INPUT",
-          value: "",
-        });
-  };
-
-  const toggleForm = () => {
-    dispatch({
-      type: "TOGGLE",
-    });
-  };
-
-  return (
-    <formContext.Provider value={{ ...state, changeInput, toggleForm }}>
-      {state.open && <div css={style}>{children}</div>}
-    </formContext.Provider>
-  );
+  return <div css={style}>{children}</div>;
 };
 
 interface formLabelProps {
@@ -103,34 +31,29 @@ interface formToggleProps {
   style?: string;
 }
 
-const FormToggle = ({ children, style }: formToggleProps) => {
-  const { toggleForm } = useFormContext("Form.Toggle");
-
-  return (
-    <button css={style} onClick={toggleForm}>
-      {children}
-    </button>
-  );
-};
-
 interface formSubmitProps {
   children?: ReactNode;
   style?: SerializedStyles;
+  input?: string;
   onSubmit?: Function;
+  disabled?: boolean;
 }
 
-const FormSubmit = ({ children, style, onSubmit }: formSubmitProps) => {
-  const { input, changeInput } = useFormContext("Form.Submit");
-
+const FormSubmit = ({
+  children,
+  style,
+  onSubmit,
+  disabled,
+  input,
+}: formSubmitProps) => {
   // TODO: diabled 여부를 판단하는 것을 props로 재사용 가능하게
   return (
     <button
       css={style}
       onClick={() => {
         if (onSubmit !== undefined) onSubmit(input);
-        changeInput();
       }}
-      disabled={input === ""}
+      disabled={disabled}
     >
       {children}
     </button>
@@ -140,22 +63,32 @@ const FormSubmit = ({ children, style, onSubmit }: formSubmitProps) => {
 interface formInputProps {
   placeholder?: string;
   style?: SerializedStyles;
+  onChange?: Function;
   onSubmit?: Function;
+  input?: string;
 }
 
-const FormInput = ({ placeholder, style, onSubmit }: formInputProps) => {
-  const { input, changeInput } = useFormContext("Form.Input");
-
+const FormInput = ({
+  placeholder,
+  style,
+  onSubmit,
+  onChange,
+  input,
+}: formInputProps) => {
   // 엔터 처리
   const handkleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    onSubmit && e && e.key === "Enter" ? onSubmit() : null;
+    onSubmit && e && e.key === "Enter" ? onSubmit(input) : null;
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange && e ? onChange(e.target.value) : null;
   };
 
   return (
     <input
       css={style}
       placeholder={placeholder}
-      onChange={changeInput}
+      onChange={handleChange}
       value={input}
       onKeyDown={handkleKeyDown}
     />
@@ -165,6 +98,5 @@ const FormInput = ({ placeholder, style, onSubmit }: formInputProps) => {
 export const Form = Object.assign(FormMain, {
   Label: FormLabel,
   Submit: FormSubmit,
-  Toggle: FormToggle,
   Input: FormInput,
 });
