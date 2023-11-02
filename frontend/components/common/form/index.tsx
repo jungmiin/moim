@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import {
-  useState,
   createContext,
   useContext,
   ReactNode,
   ChangeEvent,
+  KeyboardEvent,
   useReducer,
 } from "react";
 import { css, SerializedStyles } from "@emotion/react";
@@ -140,10 +140,16 @@ const FormSubmit = ({ children, style, onSubmit }: formSubmitProps) => {
 interface formInputProps {
   placeholder?: string;
   style?: SerializedStyles;
+  onSubmit?: Function;
 }
 
-const FormInput = ({ placeholder, style }: formInputProps) => {
+const FormInput = ({ placeholder, style, onSubmit }: formInputProps) => {
   const { input, changeInput } = useFormContext("Form.Input");
+
+  // 엔터 처리
+  const handkleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    onSubmit && e && e.key === "Enter" ? onSubmit() : null;
+  };
 
   return (
     <input
@@ -151,6 +157,7 @@ const FormInput = ({ placeholder, style }: formInputProps) => {
       placeholder={placeholder}
       onChange={changeInput}
       value={input}
+      onKeyDown={handkleKeyDown}
     />
   );
 };

@@ -39,7 +39,8 @@ export const MoimNameDropdown = ({
         <Form style={formStyle}>
           <Form.Input
             style={formInputStyle}
-            placeholder="모임 명을 입력해주세요."
+            placeholder="모임 이름을 입력해주세요."
+            onSubmit={generateNewBoard}
           />
           <Form.Submit style={formRightButtonStyle} onSubmit={generateNewBoard}>
             만들기
