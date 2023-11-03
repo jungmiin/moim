@@ -69,7 +69,6 @@ const FormInput = ({
 }: formInputProps) => {
   // 엔터 처리
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key, e.nativeEvent.isComposing);
     if (
       onSubmit &&
       onChange &&
