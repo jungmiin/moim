@@ -13,6 +13,7 @@ export const MoimNameDropdown = ({
   const [moimName, setMoimName] = useState("");
 
   const generateNewBoard = async (input: string) => {
+    console.log(input);
     setLoading(true);
     const response = await fetch("/api/board", {
       method: "POST",

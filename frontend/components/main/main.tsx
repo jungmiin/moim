@@ -2,10 +2,16 @@ import { common } from "@/styles/common";
 import { css } from "@emotion/react";
 import { Alata } from "@next/font/google";
 import { useState } from "react";
-import Loading from "../common/loading";
+import Spinner from "../common/loading";
 import { MoimNameDropdown } from "./moimNameDropdown";
 
 const alata = Alata({ weight: ["400"], preload: false });
+
+const GenerateLoading = () => (
+  <div css={loadingCss}>
+    <Spinner /> 모임을 생성중이에요...
+  </div>
+);
 
 const MainWrapper = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -14,11 +20,7 @@ const MainWrapper = () => {
       <div css={descWrapperCss}>#오늘부턴_약속도_간편하게_🤩</div>
       <div css={titleCss}>moim</div>
       <MoimNameDropdown setLoading={setLoading} />
-      {isLoading && (
-        <div css={loadingCss}>
-          <Loading /> 모임을 생성중이에요...
-        </div>
-      )}
+      {isLoading && <GenerateLoading />}
     </div>
   );
 };
