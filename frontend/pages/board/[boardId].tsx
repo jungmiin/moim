@@ -5,10 +5,24 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { common } from "@/styles/common";
 import { useToast } from "@/components/common/toast/context";
+import Head from "next/head";
+
+interface userInterface {
+  selectedDays: string[];
+  userColor: string;
+  userName: string;
+  _id: string;
+}
+interface boardDataInterface {
+  _id: string;
+  boardName: string;
+  createdDate: string;
+  users: userInterface[];
+}
 
 const Board = () => {
   const router = useRouter();
-  const [boardData, setBoardData] = useState();
+  const [boardData, setBoardData] = useState<boardDataInterface>();
   const toast = useToast();
   // 초기 board 데이터 받아옴
   useEffect(() => {
@@ -30,6 +44,9 @@ const Board = () => {
     // TODO : 로딩
     boardData && (
       <div css={wrapperCss}>
+        <Head>
+          <title>{`${boardData.boardName} 모임`}</title>
+        </Head>
         <CalendarWrapper boardData={boardData} setBoardData={setBoardData} />
         <ResultWrapper boardData={boardData} setBoardData={setBoardData} />
         <button

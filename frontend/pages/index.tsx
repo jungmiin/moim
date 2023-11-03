@@ -1,4 +1,5 @@
 import { useRef, PointerEvent } from "react";
+import Head from "next/head";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { common } from "@/styles/common";
@@ -13,6 +14,9 @@ const Home = () => {
 
   return (
     <>
+      <Head>
+        <title>moim : 오늘부턴 약속도 간편하게</title>
+      </Head>
       <Index onPointerMove={handleMouseMove}>
         <MainWrapper />
         <CanvasWrapper mouse={mouse} />
