@@ -23,6 +23,7 @@ const EditPeople = ({
   setBoardData,
 }: addPeoplePropsInterface) => {
   const [people, setPeople] = useState<Array<personInterface>>([]);
+  const [personName, setPersonName] = useState<string>("");
 
   useEffect(() => {
     const newPeople = boardData.users.map((user: any) => {
@@ -127,8 +128,19 @@ const EditPeople = ({
         <Form.Label style={labelCss}>
           추가할 사람의 이름을 입력해주세요
         </Form.Label>
-        <Form.Input style={inputCss} placeholder="이름" />
-        <Form.Submit style={submitCss} onSubmit={addPerson}>
+        <Form.Input
+          style={inputCss}
+          placeholder="이름"
+          onSubmit={addPerson}
+          input={personName}
+          onChange={setPersonName}
+        />
+        <Form.Submit
+          style={submitCss}
+          onSubmit={addPerson}
+          input={personName}
+          onChange={setPersonName}
+        >
           추가하기
         </Form.Submit>
       </Form>

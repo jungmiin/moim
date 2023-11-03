@@ -19,16 +19,12 @@ const FormLabel = ({ children, style }: formLabelProps) => {
   return <div css={style}>{children}</div>;
 };
 
-interface formToggleProps {
-  children?: ReactNode;
-  style?: string;
-}
-
 interface formSubmitProps {
   children?: ReactNode;
   style?: SerializedStyles;
   input?: string;
   onSubmit?: Function;
+  onChange?: Function;
   disabled?: boolean;
 }
 
@@ -36,6 +32,7 @@ const FormSubmit = ({
   children,
   style,
   onSubmit,
+  onChange,
   disabled,
   input,
 }: formSubmitProps) => {
@@ -43,7 +40,10 @@ const FormSubmit = ({
     <button
       css={style}
       onClick={() => {
-        if (onSubmit !== undefined) onSubmit(input);
+        if (onSubmit && onChange) {
+          onSubmit(input);
+          onChange("");
+        }
       }}
       disabled={disabled}
     >
@@ -69,9 +69,17 @@ const FormInput = ({
 }: formInputProps) => {
   // 엔터 처리
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    onSubmit && e && e.nativeEvent.isComposing && e.key === "Enter"
-      ? onSubmit(input)
-      : null;
+    console.log(e.key, e.nativeEvent.isComposing);
+    if (
+      onSubmit &&
+      onChange &&
+      e &&
+      !e.nativeEvent.isComposing &&
+      e.key === "Enter"
+    ) {
+      onSubmit(input);
+      onChange("");
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

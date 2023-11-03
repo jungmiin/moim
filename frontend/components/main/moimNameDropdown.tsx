@@ -49,6 +49,7 @@ export const MoimNameDropdown = ({
           <Form.Submit
             style={formRightButtonStyle}
             onSubmit={generateNewBoard}
+            onChange={setMoimName}
             disabled={moimName === ""}
             input={moimName}
           >
