@@ -39,7 +39,6 @@ const FormSubmit = ({
   disabled,
   input,
 }: formSubmitProps) => {
-  // TODO: diabled 여부를 판단하는 것을 props로 재사용 가능하게
   return (
     <button
       css={style}
@@ -69,8 +68,10 @@ const FormInput = ({
   input,
 }: formInputProps) => {
   // 엔터 처리
-  const handkleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    onSubmit && e && e.key === "Enter" ? onSubmit(input) : null;
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    onSubmit && e && e.nativeEvent.isComposing && e.key === "Enter"
+      ? onSubmit(input)
+      : null;
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +84,7 @@ const FormInput = ({
       placeholder={placeholder}
       onChange={handleChange}
       value={input}
-      onKeyDown={handkleKeyDown}
+      onKeyDown={handleKeyDown}
     />
   );
 };
