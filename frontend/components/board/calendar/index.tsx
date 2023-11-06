@@ -15,10 +15,9 @@ import Grid from "./grid";
 
 interface calendarProps {
   boardData: boardDataInterface;
-  setBoardData: Function;
 }
 
-const Calendar = ({ boardData, setBoardData }: calendarProps) => {
+const Calendar = ({ boardData }: calendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [month, setMonth] = useState<dayInterface[][]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
@@ -31,7 +30,7 @@ const Calendar = ({ boardData, setBoardData }: calendarProps) => {
     setUsers(boardData.users);
     const newDateMap = convertUserToDay(boardData);
     setDateMap(newDateMap);
-  }, [boardData, setBoardData]);
+  }, [boardData]);
 
   useEffect(() => {
     const newMonth = getMonth(currentMonth, dateMap, selectedDays);

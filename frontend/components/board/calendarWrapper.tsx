@@ -6,7 +6,11 @@ import { boardDataInterface } from "@/interfaces";
 
 const alata = Alata({ weight: ["400"], preload: false });
 
-const CalendarWrapper = ({ boardData }: { boardData: boardDataInterface }) => {
+interface calendarWrapperProps {
+  boardData: boardDataInterface;
+}
+
+const CalendarWrapper = ({ boardData }: calendarWrapperProps) => {
   return (
     <div>
       <span css={boardNameWrapperStyle}>

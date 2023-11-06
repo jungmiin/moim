@@ -12,7 +12,11 @@ import {
   resultInterface,
 } from "@/interfaces";
 
-const ResultWrapper = ({ boardData }: { boardData: boardDataInterface }) => {
+interface resultWrapperProps {
+  boardData: boardDataInterface;
+}
+
+const ResultWrapper = ({ boardData }: resultWrapperProps) => {
   const [isAddPeople, setAddPeople] = useState(false);
   const [result, setResult] = useState<resultInterface[]>([]);
   const [dateMap, setDateMap] = useState<dateMapInterface>({});
