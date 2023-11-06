@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { addedPersonInterface, deletedPersonInterface } from "@/interfaces";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 const useGetQuery = (url: string, key: string, etc?: object) => {
   const queryKey = [key];
