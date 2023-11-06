@@ -15,6 +15,7 @@ export const common = {
     tenaryColor: "#f6f9fc",
     primaryGrey: "#B9B9B9",
     primaryBlack: "#181818",
+    primaryWhite: "#FFFFFF",
     secondaryGrey: "#CCCCCC",
     tenaryGrey: "#F0F0F0",
     labelPurple: "#CDB2F0",
