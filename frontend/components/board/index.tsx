@@ -12,9 +12,8 @@ import { useGetBoard } from "@/hooks/useBoard";
 import axios from "axios";
 
 const BoardWrapper = () => {
-  const [boarddat, setBoardData] = useState();
   const toast = useToast();
-  const { status, data: boardData } = useGetBoard();
+  const { data: boardData } = useGetBoard();
 
   return (
     <>
@@ -49,9 +48,10 @@ const shareButtonCss = css`
   border-radius: 2rem;
   font-size: 0.72rem;
   font-weight: 700;
-  background: ${common.gradient.secondaryGradient};
-  color: ${common.colors.tenaryColor};
-  transition: all 0.2s linear;
+  background: ${common.colors.primaryWhite};
+  color: ${common.colors.primaryBlack};
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.04);
+  border: 1px solid ${common.colors.tenaryGrey};
   z-index: 2;
   position: fixed;
   bottom: 2rem;
@@ -62,9 +62,12 @@ const shareButtonCss = css`
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     transition: all 0.2s;
+    color: ${common.colors.primaryWhite};
     content: "";
   }
   &:hover {
+    background: ${common.gradient.secondaryGradient};
+    color: ${common.colors.primaryWhite};
     &::before {
       margin-left: 0.2rem;
       opacity: 1;
