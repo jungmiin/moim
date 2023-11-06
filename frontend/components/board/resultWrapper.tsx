@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import EditPeople from "@/components/board/result/editPeople";
 import { common } from "@/styles/common";
 import CardList from "./result/cardList";
-import { convertUserToDay } from "@/lib/dayConvert";
+import { convertUserToDay } from "@/lib/day";
 interface personInterface {
   _id: string;
   userName: string;
