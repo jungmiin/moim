@@ -11,9 +11,6 @@ interface listMainProps {
 }
 
 const ListMain = ({ className, children, style, css }: listMainProps) => {
-  useEffect(() => {
-    console.log(className, children, style, css);
-  }, []);
   return (
     <div className={className} css={css} style={style}>
       {children}

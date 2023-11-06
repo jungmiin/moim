@@ -2,17 +2,21 @@ import dayjs from "dayjs";
 import weekdayPlugin from "dayjs/plugin/weekday";
 import objectPlugin from "dayjs/plugin/toObject";
 import isTodayPlugin from "dayjs/plugin/isToday";
-import { dateMapInterface } from "@/interfaces";
+import {
+  boardDataInterface,
+  dateMapInterface,
+  userInterface,
+} from "@/interfaces";
 
 dayjs.extend(weekdayPlugin);
 dayjs.extend(objectPlugin);
 dayjs.extend(isTodayPlugin);
 
-export const convertUserToDay = (boardData: any) => {
+export const convertUserToDay = (boardData: boardDataInterface) => {
   const dateMap = {} as any;
-  boardData.users.forEach((user: any) => {
+  boardData.users.forEach((user: userInterface) => {
     if (user.selectedDays) {
-      user.selectedDays.forEach((selectedDay: any) => {
+      user.selectedDays.forEach((selectedDay: string) => {
         if (dateMap.hasOwnProperty(selectedDay)) {
           dateMap[selectedDay].possible.push({
             userId: user._id,
@@ -64,7 +68,7 @@ const formatedDateObject = (
     year: clonedObject.years,
     isCurrentMonth: clonedObject.months === currentMonth.month(),
     isCurrentDay: date.isToday(),
-    selectedUsers: dateMap.hasOwnProperty(date.toString())
+    possibleUsers: dateMap.hasOwnProperty(date.toString())
       ? dateMap[date.toString()].possible
       : [],
     isSelected: selectedDays.includes(date.toString()) ? true : false,

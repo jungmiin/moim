@@ -2,16 +2,11 @@ import { css } from "@emotion/react";
 import Calendar from "./calendar";
 import { common } from "@/styles/common";
 import { Alata } from "@next/font/google";
+import { boardDataInterface } from "@/interfaces";
 
 const alata = Alata({ weight: ["400"], preload: false });
 
-const CalendarWrapper = ({
-  boardData,
-  setBoardData,
-}: {
-  boardData: any;
-  setBoardData: any;
-}) => {
+const CalendarWrapper = ({ boardData }: { boardData: boardDataInterface }) => {
   return (
     <div>
       <span css={boardNameWrapperStyle}>
@@ -22,7 +17,7 @@ const CalendarWrapper = ({
         </span>
       </span>
       <div css={wrapperStyle}>
-        <Calendar boardData={boardData} setBoardData={setBoardData} />
+        <Calendar boardData={boardData} />
       </div>
     </div>
   );

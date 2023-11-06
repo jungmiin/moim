@@ -9,13 +9,13 @@ import {
   dateMapInterface,
   dayInterface,
   modalInterface,
-  userInCalendarInterface,
+  userInterface,
 } from "@/interfaces";
 
 interface gridProps {
   month: dayInterface[][];
   isEditMode: boolean;
-  selectedUser: userInCalendarInterface | null;
+  selectedUser: userInterface | null;
   dateMap: dateMapInterface;
   selectedDays: string[];
   setSelectedDays: Function;
@@ -64,7 +64,7 @@ const Grid = ({
   };
   const handleDayEnter = (e: MouseEvent<HTMLDivElement>, day: dayInterface) => {
     !isEditMode &&
-      day.selectedUsers.length > 0 &&
+      day.possibleUsers.length > 0 &&
       Modal.handle({ e, setModalInfo, dateMap });
   };
 
@@ -87,7 +87,7 @@ const Grid = ({
       >
         {day.date}
         <div className="users">
-          {day.selectedUsers.map((user, index) => (
+          {day.possibleUsers.map((user, index) => (
             <div className="user" key={index} css={selectedUserCss(user)}></div>
           ))}
         </div>
@@ -123,7 +123,7 @@ const Grid = ({
   );
 };
 
-const selectedUserCss = (user: userInCalendarInterface) => css`
+const selectedUserCss = (user: userInterface) => css`
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 0.3rem;
@@ -144,7 +144,7 @@ const dayCss = (day: dayInterface, isEditMode: boolean) => css`
   font-weight: 700;
   padding: 0.75rem;
   box-shadow: 0 0 0 1px ${common.colors.tenaryGrey};
-  cursor: ${day.selectedUsers.length > 0 || (day.isCurrentMonth && isEditMode)
+  cursor: ${day.possibleUsers.length > 0 || (day.isCurrentMonth && isEditMode)
     ? "pointer"
     : "default"};
   &.not-current {

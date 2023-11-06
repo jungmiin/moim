@@ -12,20 +12,16 @@ import dayjs from "dayjs";
 import { common } from "@/styles/common";
 import { Dropdown } from "@/components/common/dropdown";
 import { List } from "@/components/common/list";
-import {
-  boardDataInCalendarInterface,
-  userInCalendarInterface,
-  userInterface,
-} from "@/interfaces";
+import { boardDataInterface, userInterface } from "@/interfaces";
 import { useUpdateDay } from "@/hooks/useDay";
 
 interface headerProps {
-  boardData: boardDataInCalendarInterface;
+  boardData: boardDataInterface;
   currentMonth: dayjs.Dayjs;
   setCurrentMonth: Dispatch<SetStateAction<dayjs.Dayjs>>;
-  users: Array<userInCalendarInterface>;
-  setSelectedUser: Dispatch<SetStateAction<userInCalendarInterface | null>>;
-  selectedUser: userInCalendarInterface | null;
+  users: Array<userInterface>;
+  setSelectedUser: Dispatch<SetStateAction<userInterface | null>>;
+  selectedUser: userInterface | null;
   toggleEditMode: () => void;
   isEditMode: boolean;
   selectedDays: Array<string>;
@@ -82,7 +78,7 @@ const Header = ({
     return `${currentMonth.year()}년 ${currentMonth.month() + 1}월`;
   };
 
-  const selectBadge = (clickedUser: userInCalendarInterface) => {
+  const selectBadge = (clickedUser: userInterface) => {
     setSelectedUser(clickedUser);
     const user = boardData.users.find(
       (user: userInterface) => user._id === clickedUser._id
@@ -160,7 +156,7 @@ const dropdownCss = css`
   display: flex;
 `;
 
-const badgeCss = (use: userInCalendarInterface) => css`
+const badgeCss = (use: userInterface) => css`
   display: flex;
   align-items: center;
   font-size: 0.67rem;

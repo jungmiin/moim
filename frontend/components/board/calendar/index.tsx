@@ -6,15 +6,15 @@ import { common } from "@/styles/common";
 import Header from "./header";
 import { convertUserToDay, getMonth } from "@/lib/day";
 import {
-  boardDataInCalendarInterface,
+  boardDataInterface,
   dateMapInterface,
   dayInterface,
-  userInCalendarInterface,
+  userInterface,
 } from "@/interfaces";
 import Grid from "./grid";
 
 interface calendarProps {
-  boardData: boardDataInCalendarInterface;
+  boardData: boardDataInterface;
   setBoardData: Function;
 }
 
@@ -22,9 +22,8 @@ const Calendar = ({ boardData, setBoardData }: calendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [month, setMonth] = useState<dayInterface[][]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [users, setUsers] = useState<userInCalendarInterface[]>([]);
-  const [selectedUser, setSelectedUser] =
-    useState<userInCalendarInterface | null>(null);
+  const [users, setUsers] = useState<userInterface[]>([]);
+  const [selectedUser, setSelectedUser] = useState<userInterface | null>(null);
   const [isEditMode, setEditMode] = useState(false);
   const [dateMap, setDateMap] = useState<dateMapInterface>({});
 
@@ -50,7 +49,6 @@ const Calendar = ({ boardData, setBoardData }: calendarProps) => {
       <Header
         {...{
           boardData,
-          setBoardData,
           currentMonth,
           setCurrentMonth,
           users,

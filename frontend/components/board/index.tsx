@@ -25,8 +25,8 @@ const BoardWrapper = () => {
               (boardData as boardDataInterface).boardName
             } 모임`}</title>
           </Head>
-          <CalendarWrapper boardData={boardData} setBoardData={setBoardData} />
-          <ResultWrapper boardData={boardData} setBoardData={setBoardData} />
+          <CalendarWrapper boardData={boardData} />
+          <ResultWrapper boardData={boardData} />
           <button
             css={shareButtonCss}
             onClick={() => {
