@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { SetStateAction, Dispatch } from "react";
+import { SetStateAction, Dispatch, memo } from "react";
 import { css } from "@emotion/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,23 +12,20 @@ import dayjs from "dayjs";
 import { common } from "@/styles/common";
 import { Dropdown } from "@/components/common/dropdown";
 import { List } from "@/components/common/list";
+import {
+  boardDataInCalendarInterface,
+  userInCalendarInterface,
+  userInterface,
+} from "@/interfaces";
+import { useUpdateDay } from "@/hooks/useDay";
 
-interface personInterface {
-  _id: string;
-  userName: string;
-  userColor: string;
-  isSelected: boolean;
-  selectedDays?: Array<string>;
-}
-
-interface headerPropsInterface {
-  boardData: any;
-  setBoardData: any;
+interface headerProps {
+  boardData: boardDataInCalendarInterface;
   currentMonth: dayjs.Dayjs;
   setCurrentMonth: Dispatch<SetStateAction<dayjs.Dayjs>>;
-  people: Array<personInterface>;
-  setSelectedPerson: Dispatch<SetStateAction<personInterface | null>>;
-  selectedPerson: personInterface | null;
+  users: Array<userInCalendarInterface>;
+  setSelectedUser: Dispatch<SetStateAction<userInCalendarInterface | null>>;
+  selectedUser: userInCalendarInterface | null;
   toggleEditMode: () => void;
   isEditMode: boolean;
   selectedDays: Array<string>;
@@ -37,44 +34,33 @@ interface headerPropsInterface {
 
 const Header = ({
   boardData,
-  setBoardData,
   currentMonth,
   setCurrentMonth,
-  people,
-  setSelectedPerson,
-  selectedPerson,
+  users,
+  setSelectedUser,
+  selectedUser,
   toggleEditMode,
   isEditMode,
   selectedDays,
   setSelectedDays,
-}: headerPropsInterface) => {
+}: headerProps) => {
   const nextMonthHandler = () => setCurrentMonth(currentMonth.add(1, "month"));
   const prevMonthHandler = () =>
     setCurrentMonth(currentMonth.subtract(1, "month"));
-  const addNewDays = async () => {
-    const response = await fetch("/api/day", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        boardId: boardData._id,
-        userId: selectedPerson?._id,
-        days: selectedDays,
-      }),
+  const { mutate: updateDays } = useUpdateDay();
+
+  const handleUpdateDays = () => {
+    updateDays({
+      boardId: boardData._id,
+      userId: selectedUser?._id,
+      days: selectedDays,
     });
-    if (response.status === 200) {
-      const result = await response.json();
-      setBoardData(result);
-    } else {
-      throw new Error("POST /day");
-    }
   };
 
   const clickEditButton = () => {
     if (isEditMode) {
-      if (selectedPerson !== null) {
-        addNewDays();
+      if (selectedUser !== null) {
+        handleUpdateDays();
       }
     }
     toggleEditMode();
@@ -96,10 +82,12 @@ const Header = ({
     return `${currentMonth.year()}년 ${currentMonth.month() + 1}월`;
   };
 
-  const selectBadge = (person: personInterface) => {
-    setSelectedPerson(person);
-    const user = boardData.users.find((user: any) => user._id === person._id);
-    setSelectedDays(user.selectedDays);
+  const selectBadge = (clickedUser: userInCalendarInterface) => {
+    setSelectedUser(clickedUser);
+    const user = boardData.users.find(
+      (user: userInterface) => user._id === clickedUser._id
+    );
+    if (user) setSelectedDays(user.selectedDays);
   };
   return (
     <>
@@ -119,22 +107,22 @@ const Header = ({
             <Dropdown className={"dropdown"} css={dropdownCss}>
               <Dropdown.Menu>
                 <List className={"list"} css={listCss}>
-                  {people.map((person) => {
+                  {users.map((user) => {
                     return (
                       <List.Item
-                        key={person._id}
-                        index={person._id}
+                        key={user._id}
+                        index={user._id}
                         className={`${
-                          selectedPerson === null
+                          selectedUser === null
                             ? ""
-                            : selectedPerson._id === person._id
+                            : selectedUser._id === user._id
                             ? "selected"
                             : "not-selected"
                         }`}
-                        css={badgeCss(person)}
-                        onClick={(e: EventTarget) => selectBadge(person)}
+                        css={badgeCss(user)}
+                        onClick={() => selectBadge(user)}
                       >
-                        {person.userName}
+                        {user.userName}
                       </List.Item>
                     );
                   })}
@@ -172,7 +160,7 @@ const dropdownCss = css`
   display: flex;
 `;
 
-const badgeCss = (person: personInterface) => css`
+const badgeCss = (use: userInCalendarInterface) => css`
   display: flex;
   align-items: center;
   font-size: 0.67rem;
@@ -185,15 +173,15 @@ const badgeCss = (person: personInterface) => css`
     cursor: pointer;
   }
   background-color: white;
-  color: ${person.userColor};
-  box-shadow: 0 0 0 1px ${person.userColor} inset;
+  color: ${use.userColor};
+  box-shadow: 0 0 0 1px ${use.userColor} inset;
   &.not-selected {
     background-color: white;
-    color: ${person.userColor};
-    box-shadow: 0 0 0 1px ${person.userColor} inset;
+    color: ${use.userColor};
+    box-shadow: 0 0 0 1px ${use.userColor} inset;
   }
   &.selected {
-    background-color: ${person.userColor};
+    background-color: ${use.userColor};
     color: white;
   }
 `;
@@ -277,4 +265,4 @@ const dayCss = css`
   color: ${common.colors.primaryColor};
 `;
 
-export default Header;
+export default memo(Header);
