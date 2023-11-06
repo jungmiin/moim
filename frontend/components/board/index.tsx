@@ -1,15 +1,12 @@
 import { css } from "@emotion/react";
 import CalendarWrapper from "@/components/board/calendarWrapper";
 import ResultWrapper from "@/components/board/resultWrapper";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { common } from "@/styles/common";
 import { useToast } from "@/components/common/toast/context";
 import Head from "next/head";
 import { boardDataInterface } from "@/interfaces";
 import Loading from "../common/loading";
 import { useGetBoard } from "@/hooks/useBoard";
-import axios from "axios";
 
 const BoardWrapper = () => {
   const toast = useToast();
@@ -49,7 +46,7 @@ const shareButtonCss = css`
   font-size: 0.72rem;
   font-weight: 700;
   background: ${common.colors.primaryWhite};
-  color: ${common.colors.primaryBlack};
+  color: ${common.colors.primaryColor};
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.04);
   border: 1px solid ${common.colors.tenaryGrey};
   z-index: 2;

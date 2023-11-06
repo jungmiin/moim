@@ -59,7 +59,7 @@ const CardList = ({ dateMap, result }: cardListProps) => {
                 onMouseOver={(e: any) =>
                   Modal.handle({ e, setModalInfo, dateMap })
                 }
-                onMouseOut={(e: any) => setModalInfo(null)}
+                onMouseOut={() => setModalInfo(null)}
               >
                 자세히 보기
               </button>

@@ -65,13 +65,12 @@ const Grid = ({
     }
   };
   const handleDayEnter = (e: MouseEvent<HTMLDivElement>, day: dayInterface) => {
-    !isEditMode &&
-      day.possibleUsers.length > 0 &&
+    if (!isEditMode && day.possibleUsers.length > 0)
       Modal.handle({ e, setModalInfo, dateMap });
+    else setModalInfo(null);
   };
-
   const handleDayLeave = () => {
-    !isEditMode && setModalInfo(null);
+    setModalInfo(null);
   };
 
   const Day = ({ day, dayIndex, weekIndex }: dayProps) => {

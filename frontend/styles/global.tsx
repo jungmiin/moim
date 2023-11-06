@@ -3,6 +3,8 @@ import { css, Global } from "@emotion/react";
 export const globalStyles = (
   <Global
     styles={css`
+      @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+
       /* Smartphones (landscape) ----------- */
       @media only screen and (min-width: 321px) {
         :root {
@@ -50,6 +52,7 @@ export const globalStyles = (
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: "Pretendard";
       }
       a {
         text-decoration: none;
