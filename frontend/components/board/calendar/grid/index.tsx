@@ -57,8 +57,10 @@ const Grid = ({
     if (isEditMode) {
       if (day.isCurrentMonth && selectedUser) {
         selectDay(e);
-      } else {
+      } else if (day.isCurrentMonth) {
         toast && toast.message("사람을 선택해야 날짜를 선택할 수 있어요.");
+      } else {
+        toast && toast.message("상단의 화살표를 통해 달을 변경해주세요.");
       }
     }
   };
