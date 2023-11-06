@@ -12,12 +12,10 @@ const Home = () => {
   };
 
   return (
-    <>
-      <Index onPointerMove={handleMouseMove}>
-        <MainWrapper />
-        <CanvasWrapper mouse={mouse} />
-      </Index>
-    </>
+    <Index onPointerMove={handleMouseMove}>
+      <MainWrapper />
+      <CanvasWrapper mouse={mouse} />
+    </Index>
   );
 };
 

@@ -4,41 +4,25 @@ import { css } from "@emotion/react";
 import EditPeople from "@/components/board/result/editPeople";
 import { common } from "@/styles/common";
 import CardList from "./result/cardList";
-import { convertUserToDay } from "@/lib/dayConvert";
-interface personInterface {
-  _id: string;
-  userName: string;
-  userColor: string;
-  isSelected: boolean;
-  selectedDays?: Array<string>;
-}
-interface MapInterface {
-  [key: string]: dateInterface;
-}
-interface dateInterface {
-  possible: personInterface[];
-  impossible: personInterface[];
+import { convertUserToDay } from "@/lib/day";
+import {
+  userInterface,
+  dateMapInterface,
+  boardDataInterface,
+  resultInterface,
+} from "@/interfaces";
+
+interface resultWrapperProps {
+  boardData: boardDataInterface;
 }
 
-const ResultWrapper = ({
-  boardData,
-  setBoardData,
-}: {
-  boardData: any;
-  setBoardData: any;
-}) => {
+const ResultWrapper = ({ boardData }: resultWrapperProps) => {
   const [isAddPeople, setAddPeople] = useState(false);
-  const [result, setResult] = useState<
-    {
-      date: dayjs.Dayjs;
-      possible: personInterface[];
-      impossible: personInterface[];
-    }[]
-  >([]);
-  const [dateMap, setDateMap] = useState<MapInterface>({});
+  const [result, setResult] = useState<resultInterface[]>([]);
+  const [dateMap, setDateMap] = useState<dateMapInterface>({});
 
   useEffect(() => {
-    const newDateMap = convertUserToDay(boardData) as MapInterface;
+    const newDateMap = convertUserToDay(boardData) as dateMapInterface;
     setDateMap(newDateMap);
   }, [boardData]);
 
@@ -65,11 +49,7 @@ const ResultWrapper = ({
     <>
       {isAddPeople ? (
         <div css={wrapperCss}>
-          <EditPeople
-            toggleAddPeople={toggleAddPeople}
-            boardData={boardData}
-            setBoardData={setBoardData}
-          />
+          <EditPeople toggleAddPeople={toggleAddPeople} boardData={boardData} />
         </div>
       ) : (
         <div css={wrapperCss}>

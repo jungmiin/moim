@@ -1,104 +1,40 @@
-import { useState, useEffect, MouseEventHandler } from "react";
+import { useState, MouseEventHandler } from "react";
 import { css } from "@emotion/react";
 import { common } from "@/styles/common";
 import { Form } from "../../common/form";
 import { List } from "../../common/list";
-import { getRandomPastelColor } from "@/lib/random";
-interface addPeoplePropsInterface {
+import { getRandomPastelColor } from "@/lib/color";
+import { useAddUser, useDeleteUser } from "@/hooks/useUser";
+import { boardDataInterface, userInterface } from "@/interfaces";
+interface editPeopleProps {
   toggleAddPeople: MouseEventHandler;
-  boardData: any;
-  setBoardData: any;
+  boardData: boardDataInterface;
 }
 
-interface personInterface {
-  _id: string;
-  userName: string;
-  userColor: string;
-  isNew: boolean;
-}
+const EditPeople = ({ toggleAddPeople, boardData }: editPeopleProps) => {
+  const users = boardData.users;
+  const [userName, setUserName] = useState<string>("");
+  const { mutate: deleteUser } = useDeleteUser();
+  const { mutate: addUser } = useAddUser();
 
-const EditPeople = ({
-  toggleAddPeople,
-  boardData,
-  setBoardData,
-}: addPeoplePropsInterface) => {
-  const [people, setPeople] = useState<Array<personInterface>>([]);
-
-  useEffect(() => {
-    const newPeople = boardData.users.map((user: any) => {
-      return {
-        _id: user._id,
-        userName: user.userName,
-        userColor: user.userColor,
-        isNew: false,
-      };
-    });
-    setPeople(newPeople);
-  }, [boardData]);
-
-  const removePerson = async (id: string) => {
-    const response = await fetch("/api/user", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        boardId: boardData._id,
-        userId: id,
-      }),
-    });
-    if (response.status === 200) {
-      const result = await response.json();
-      setBoardData(result);
-    } else {
-      throw new Error("DELETE /user");
-    }
+  const handleDeleteUser = (id: string) => {
+    deleteUser({ boardId: boardData._id, userId: id });
   };
 
-  const addPerson = async (name: string) => {
-    const response = await fetch("/api/user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  const handleAddUser = () => {
+    addUser({
+      boardId: boardData._id,
+      user: {
+        userName,
+        userColor: getRandomPastelColor(),
       },
-      body: JSON.stringify({
-        boardId: boardData._id,
-        user: {
-          userName: name,
-          userColor: getRandomPastelColor(),
-        },
-      }),
     });
-    if (response.status === 200) {
-      const result = await response.json();
-      setBoardData(result);
-    } else {
-      throw new Error("POST /user");
-    }
-  };
-
-  const getBadgeStyle = (person: personInterface) => {
-    return css`
-      display: flex;
-      align-items: center;
-      background-color: ${person.userColor};
-      font-size: 0.67rem;
-      color: white;
-      padding: 0.25rem 0.67rem;
-      border-radius: 1rem;
-      margin: 0.2rem 0.05rem;
-      cursor: pointer;
-      .fa {
-        margin-right: 0.4rem;
-        cursor: pointer;
-      }
-    `;
   };
 
   return (
     <>
       <button css={buttonCss} onClick={toggleAddPeople}>
-        {"돌아가기"}
+        돌아가기
       </button>
       <Form>
         <Form.Label style={labelCss}>현재 추가된 인원이에요</Form.Label>
@@ -111,15 +47,15 @@ const EditPeople = ({
             marginBottom: "1rem",
           }}
         >
-          {people.map((person) => {
+          {users.map((user) => {
             return (
               <List.RemovableItem
-                key={person._id}
-                index={person._id}
-                css={getBadgeStyle(person)}
-                onRemove={removePerson}
+                key={user._id}
+                index={user._id}
+                css={getBadgeStyle(user)}
+                onRemove={handleDeleteUser}
               >
-                {person.userName}
+                {user.userName}
               </List.RemovableItem>
             );
           })}
@@ -127,13 +63,42 @@ const EditPeople = ({
         <Form.Label style={labelCss}>
           추가할 사람의 이름을 입력해주세요
         </Form.Label>
-        <Form.Input style={inputCss} placeholder="이름" />
-        <Form.Submit style={submitCss} onSubmit={addPerson}>
+        <Form.Input
+          style={inputCss}
+          placeholder="이름"
+          onSubmit={handleAddUser}
+          input={userName}
+          onChange={setUserName}
+        />
+        <Form.Submit
+          style={submitCss}
+          onSubmit={handleAddUser}
+          input={userName}
+          onChange={setUserName}
+        >
           추가하기
         </Form.Submit>
       </Form>
     </>
   );
+};
+
+const getBadgeStyle = (user: userInterface) => {
+  return css`
+    display: flex;
+    align-items: center;
+    background-color: ${user.userColor};
+    font-size: 0.67rem;
+    color: white;
+    padding: 0.25rem 0.67rem;
+    border-radius: 1rem;
+    margin: 0.2rem 0.05rem;
+    cursor: pointer;
+    .fa {
+      margin-right: 0.4rem;
+      cursor: pointer;
+    }
+  `;
 };
 
 const labelCss = css`
@@ -218,7 +183,7 @@ const buttonCss = css`
   margin: 1rem 0;
   &::before {
     opacity: 0;
-    margin-left: -0.5em;
+    margin-left: -1.2em;
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     content: "";
@@ -226,7 +191,7 @@ const buttonCss = css`
   }
   &:hover {
     &::before {
-      margin-left: 0.5rem;
+      margin-left: 0rem;
       opacity: 1;
     }
   }

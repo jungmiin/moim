@@ -5,62 +5,39 @@ import { List } from "../../common/list";
 import { common } from "@/styles/common";
 import { css } from "@emotion/react";
 import { Modal } from "@/components/common/modal";
-
-interface personInterface {
-  _id: string;
-  userName: string;
-  userColor: string;
-  isSelected: boolean;
-  selectedDays?: Array<string>;
+import {
+  dateMapInterface,
+  modalInterface,
+  resultInterface,
+} from "@/interfaces";
+interface cardListProps {
+  dateMap: dateMapInterface;
+  result: resultInterface[];
 }
 
-interface dateInterface {
-  date: dayjs.Dayjs;
-  possible: personInterface[];
-  impossible: personInterface[];
-}
-
-interface MapInterface {
-  [key: string]: userInterface;
-}
-
-interface userInterface {
-  possible: personInterface[];
-  impossible: personInterface[];
-}
-
-interface cardListPropsInterface {
-  dateMap: MapInterface;
-  result: dateInterface[];
-}
-
-const CardList = ({ dateMap, result }: cardListPropsInterface) => {
-  const [optimalDate, setOptimalDate] = useState<dateInterface | null>(null);
-  const [otherDate, setOtherDate] = useState<dateInterface[] | null>(null);
-  const [modalInfo, setModalInfo] = useState<{
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-    date: string;
-    possible: personInterface[];
-    impossible: personInterface[];
-  } | null>(null);
+const CardList = ({ dateMap, result }: cardListProps) => {
+  const [optimalResult, setOptimalResult] = useState<resultInterface | null>(
+    null
+  );
+  const [otherResult, setOtherResult] = useState<resultInterface[] | null>(
+    null
+  );
+  const [modalInfo, setModalInfo] = useState<modalInterface | null>(null);
 
   useEffect(() => {
-    setOptimalDate(result[0]);
-    setOtherDate(result.slice(1, 5));
+    setOptimalResult(result[0]);
+    setOtherResult(result.slice(1, 5));
   }, [result]);
 
   const renderOptimalCard = () => {
     return (
       <>
-        {optimalDate !== null && (
-          <List.Item css={listCss} index={optimalDate.date.toString()}>
+        {optimalResult !== null && (
+          <List.Item css={listCss} index={optimalResult.date.toString()}>
             <span css={dateLabelCss}>제일 좋은 날짜는</span>
-            <span css={optimalDateWrapperCss}>
-              <span css={optimalDateCss}>
-                {optimalDate.date
+            <span css={optimalResultWrapperCss}>
+              <span css={optimalResultCss}>
+                {optimalResult.date
                   .locale("ko")
                   .format("YYYY년 MM월 DD일 ddd요일")}
               </span>
@@ -68,19 +45,21 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
             </span>
             <span css={statusCss}>
               가능한 사람
-              <span css={peopleCountCss}>{optimalDate.possible.length}명</span>
+              <span css={peopleCountCss}>
+                {optimalResult.possible.length}명
+              </span>
               <div css={lineCss} />
               불가능한 사람
               <span css={peopleCountCss}>
-                {optimalDate.impossible.length}명
+                {optimalResult.impossible.length}명
               </span>
               <button
-                id={optimalDate.date.toString()}
+                id={optimalResult.date.toString()}
                 css={detailButtonCss}
                 onMouseOver={(e: any) =>
                   Modal.handle({ e, setModalInfo, dateMap })
                 }
-                onMouseOut={(e: any) => setModalInfo(null)}
+                onMouseOut={() => setModalInfo(null)}
               >
                 자세히 보기
               </button>
@@ -94,11 +73,11 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
   const renderOtherCards = () => {
     return (
       <>
-        <div css={otherDateLabelCss}>이 날짜는 어떤가요?</div>
-        {otherDate !== null &&
-          otherDate.map((date, index) => (
+        <div css={otherResultLabelCss}>이 날짜는 어떤가요?</div>
+        {otherResult !== null &&
+          otherResult.map((date, index) => (
             <List.Item css={listCss} key={index} index={date.date.toString()}>
-              <span css={otherDateCss}>
+              <span css={otherResultCss}>
                 {date.date.locale("ko").format("YYYY년 MM월 DD일 ddd요일")}
               </span>
               <span css={statusCss}>
@@ -126,8 +105,8 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
   const renderCardList = () => {
     return (
       <List>
-        {optimalDate && renderOptimalCard()}
-        {otherDate && renderOtherCards()}
+        {optimalResult && renderOptimalCard()}
+        {otherResult && renderOtherCards()}
         {modalInfo && <Modal modalInfo={modalInfo} />}
       </List>
     );
@@ -137,7 +116,7 @@ const CardList = ({ dateMap, result }: cardListPropsInterface) => {
       {result.length > 0 ? (
         renderCardList()
       ) : (
-        <div css={noDateCss}>
+        <div css={noResultCss}>
           <div css={titleCss}>아직 선택한 날짜가 없어요.</div>
           <div css={descCss}>인원을 추가한 뒤 날짜를 선택해주세요.</div>
         </div>
@@ -166,12 +145,12 @@ const dateLabelCss = css`
   margin-bottom: 0.4rem;
 `;
 
-const optimalDateWrapperCss = css`
+const optimalResultWrapperCss = css`
   display: flex;
   font-size: 0.83rem;
 `;
 
-const optimalDateCss = css`
+const optimalResultCss = css`
   font-weight: 700;
   background: ${common.gradient.secondaryGradient};
   background-size: 300% 300%;
@@ -211,14 +190,14 @@ const peopleCountCss = css`
   margin-left: 0.2rem;
 `;
 
-const otherDateLabelCss = css`
+const otherResultLabelCss = css`
   font-size: 0.67rem;
   font-weight: 700;
   color: ${common.colors.primaryColor};
   margin-bottom: 0.8rem;
 `;
 
-const otherDateCss = css`
+const otherResultCss = css`
   display: flex;
   font-size: 0.67rem;
   font-weight: 700;
@@ -237,7 +216,7 @@ const listCss = css`
   cursor: default;
 `;
 
-const noDateCss = css`
+const noResultCss = css`
   display: flex;
   flex-direction: column;
   align-items: center;

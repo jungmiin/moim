@@ -5,27 +5,10 @@ import { List } from "@/components/common/list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { CSSProperties } from "react";
-
-interface personInterface {
-  _id: string;
-  userName: string;
-  userColor: string;
-  isSelected: boolean;
-  selectedDays?: Array<string>;
-}
-
-interface ModalInfoInterface {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-  date: string;
-  possible: personInterface[];
-  impossible: personInterface[];
-}
+import { modalInterface } from "@/interfaces";
 
 interface ModalPropsInterface {
-  modalInfo: ModalInfoInterface;
+  modalInfo: modalInterface;
 }
 
 interface ModalHandlePropsInterface {

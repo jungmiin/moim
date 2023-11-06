@@ -2,27 +2,32 @@ import { css } from "@emotion/react";
 import Calendar from "./calendar";
 import { common } from "@/styles/common";
 import { Alata } from "@next/font/google";
+import { boardDataInterface } from "@/interfaces";
+import Router from "next/router";
 
 const alata = Alata({ weight: ["400"], preload: false });
 
-const CalendarWrapper = ({
-  boardData,
-  setBoardData,
-}: {
-  boardData: any;
-  setBoardData: any;
-}) => {
+interface calendarWrapperProps {
+  boardData: boardDataInterface;
+}
+
+const CalendarWrapper = ({ boardData }: calendarWrapperProps) => {
+  const goMain = () => {
+    Router.push(`/`);
+  };
   return (
     <div>
       <span css={boardNameWrapperStyle}>
-        <span css={moimStyle}>moim</span>
+        <span css={moimStyle} onClick={goMain}>
+          moim
+        </span>
         <span>
           <span css={boardNameStyle}>{`${boardData.boardName} `}</span>
           모임의 달력이에요
         </span>
       </span>
       <div css={wrapperStyle}>
-        <Calendar boardData={boardData} setBoardData={setBoardData} />
+        <Calendar boardData={boardData} />
       </div>
     </div>
   );
@@ -36,6 +41,7 @@ const moimStyle = css`
   font-family: ${alata.style.fontFamily};
   color: ${common.colors.primaryColor};
   margin-right: 0.5rem;
+  cursor: pointer;
 `;
 
 const boardNameWrapperStyle = css`
@@ -47,6 +53,7 @@ const boardNameWrapperStyle = css`
   border-radius: 2rem;
   margin: 0.8rem;
   transition: all 0.2s linear 0s;
+  cursor: default;
   &:hover {
     background: ${common.colors.tenaryColor};
   }
