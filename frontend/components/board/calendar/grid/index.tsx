@@ -99,7 +99,7 @@ const Grid = ({
     return (
       <>
         {week.map((day: dayInterface, dayIndex: number) => (
-          <Day {...{ day, dayIndex, weekIndex }} />
+          <Day key={dayIndex} {...{ day, dayIndex, weekIndex }} />
         ))}
       </>
     );
@@ -109,7 +109,7 @@ const Grid = ({
     return (
       <>
         {month.map((week: dayInterface[], weekIndex: number) => (
-          <Week {...{ week, weekIndex }} />
+          <Week key={weekIndex} {...{ week, weekIndex }} />
         ))}
       </>
     );
