@@ -1,8 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { useState, useEffect } from "react";
-import { css } from "@emotion/react";
 import dayjs from "dayjs";
-import { common } from "@/styles/common";
 import Header from "./header";
 import { convertUserToDay, getMonth } from "@/lib/day";
 import {
