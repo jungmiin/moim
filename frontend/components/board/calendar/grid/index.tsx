@@ -140,7 +140,8 @@ const monthCss = css`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-gap: 1px;
+  border-top: solid 1px ${common.colors.tenaryGrey};
+  border-left: solid 1px ${common.colors.tenaryGrey};
 `;
 
 const dayCss = (day: dayInterface, isEditMode: boolean) => css`
@@ -149,7 +150,8 @@ const dayCss = (day: dayInterface, isEditMode: boolean) => css`
   font-size: 0.5rem;
   font-weight: 700;
   padding: 0.75rem;
-  box-shadow: 0 0 0 1px ${common.colors.tenaryGrey};
+  border-bottom: solid 1px ${common.colors.tenaryGrey};
+  border-right: solid 1px ${common.colors.tenaryGrey};
   cursor: ${day.possibleUsers.length > 0 || (day.isCurrentMonth && isEditMode)
     ? "pointer"
     : "default"};
