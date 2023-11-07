@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource @emotion/react */
-import { memo, MouseEvent, useState } from "react";
+import { memo, MouseEvent, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { common } from "@/styles/common";
 import { Modal } from "@/components/common/modal";
@@ -8,7 +8,7 @@ import { useToast } from "@/components/common/toast/context";
 import {
   dateMapInterface,
   dayInterface,
-  modalInterface,
+  hoverInterface,
   userInterface,
 } from "@/interfaces";
 
@@ -38,7 +38,7 @@ const Grid = ({
   selectedDays,
   setSelectedDays,
 }: gridProps) => {
-  const [modalInfo, setModalInfo] = useState<modalInterface | null>(null);
+  const [hover, setHover] = useState<hoverInterface | null>(null);
   const toast = useToast();
 
   const selectDay = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -65,12 +65,17 @@ const Grid = ({
     }
   };
   const handleDayEnter = (e: MouseEvent<HTMLDivElement>, day: dayInterface) => {
-    if (!isEditMode && day.possibleUsers.length > 0)
-      Modal.handle({ e, setModalInfo, dateMap });
-    else setModalInfo(null);
+    if (!isEditMode && day.possibleUsers.length > 0) {
+      const target = e.currentTarget as HTMLDivElement;
+      const date = target.id;
+      const rect = target.getBoundingClientRect();
+      setHover({ date, rect });
+    } else {
+      setHover(null);
+    }
   };
-  const handleDayLeave = () => {
-    setModalInfo(null);
+  const handleDayLeave = (e: MouseEvent<HTMLDivElement>) => {
+    setHover(null);
   };
 
   const Day = ({ day, dayIndex, weekIndex }: dayProps) => {
@@ -78,13 +83,13 @@ const Grid = ({
       <div
         id={day.key}
         key={weekIndex * 7 + dayIndex}
-        css={dayCss(day, isEditMode)}
-        className={`${day.isCurrentMonth ? "current" : "not-current"} ${
-          isEditMode && (day.isSelected ? "selected" : "not-selected")
-        }`}
         onClick={(e) => handleDayClick(e, day)}
         onMouseEnter={(e) => handleDayEnter(e, day)}
-        onMouseLeave={handleDayLeave}
+        onMouseLeave={(e) => handleDayLeave(e)}
+        css={dayCss(day, isEditMode)}
+        className={`day ${weekIndex * 7 + dayIndex} ${
+          day.isCurrentMonth ? "current" : "not-current"
+        } ${isEditMode && (day.isSelected ? "selected" : "not-selected")}`}
       >
         {day.date}
         <div className="users">
@@ -119,7 +124,7 @@ const Grid = ({
   return (
     <div css={monthCss}>
       <Month />
-      {modalInfo && <Modal modalInfo={modalInfo} />}
+      <Modal hover={hover} dateMap={dateMap} />
     </div>
   );
 };
@@ -135,7 +140,8 @@ const monthCss = css`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-gap: 1px;
+  border-top: solid 1px ${common.colors.tenaryGrey};
+  border-left: solid 1px ${common.colors.tenaryGrey};
 `;
 
 const dayCss = (day: dayInterface, isEditMode: boolean) => css`
@@ -144,7 +150,8 @@ const dayCss = (day: dayInterface, isEditMode: boolean) => css`
   font-size: 0.5rem;
   font-weight: 700;
   padding: 0.75rem;
-  box-shadow: 0 0 0 1px ${common.colors.tenaryGrey};
+  border-bottom: solid 1px ${common.colors.tenaryGrey};
+  border-right: solid 1px ${common.colors.tenaryGrey};
   cursor: ${day.possibleUsers.length > 0 || (day.isCurrentMonth && isEditMode)
     ? "pointer"
     : "default"};
@@ -166,6 +173,12 @@ const dayCss = (day: dayInterface, isEditMode: boolean) => css`
   }
   &:after {
     border: ${common.colors.tenaryGrey} 1px solid;
+  }
+  &:hover {
+    background-color: ${common.colors.tenaryColor};
+  }
+  .test {
+    background-color: red;
   }
   .users {
     display: flex;

@@ -42,10 +42,10 @@ export interface dayInterface {
   key: string;
 }
 export interface modalInterface {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
+  left: string;
+  right: string;
+  top: string;
+  bottom: string;
   date: string;
   possible: userInterface[];
   impossible: userInterface[];
@@ -59,4 +59,8 @@ export interface dateMapInterface {
 }
 export interface resultInterface extends dateInterface {
   date: dayjs.Dayjs;
+}
+export interface hoverInterface {
+  date: string;
+  rect: DOMRect;
 }
