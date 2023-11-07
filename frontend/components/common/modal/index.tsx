@@ -4,49 +4,50 @@ import { common } from "@/styles/common";
 import { List } from "@/components/common/list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
-import { CSSProperties } from "react";
-import { modalInterface } from "@/interfaces";
+import { MutableRefObject, useEffect, useState } from "react";
+import { dateMapInterface, hoverInterface, modalInterface } from "@/interfaces";
 
-interface ModalPropsInterface {
-  modalInfo: modalInterface;
+interface ModalProps {
+  hover: hoverInterface | null;
+  dateMap: dateMapInterface;
 }
 
-interface ModalHandlePropsInterface {
-  e: React.MouseEvent<HTMLDivElement>;
-  setModalInfo: any;
-  dateMap: any;
-}
+const Modal = ({ hover, dateMap }: ModalProps) => {
+  const [modalInfo, setModalInfo] = useState<modalInterface | null>(null);
 
-const modalHandle = ({
-  e,
-  setModalInfo,
-  dateMap,
-}: ModalHandlePropsInterface) => {
-  const target = e.currentTarget as HTMLDivElement;
-  const date = target.id;
-  const rect = target.getBoundingClientRect();
-  const height = window.innerHeight;
-  const width = window.innerWidth;
-  const scrollX = window.scrollX;
-  const scrollY = window.scrollY;
-  setModalInfo({
-    left: width / 2 > rect.x + rect.width / 2 ? rect.left + 10 : 0,
-    right: width / 2 <= rect.x + rect.width / 2 ? width - rect.right + 10 : 0,
-    top:
-      height / 2 > rect.y + rect.height / 2
-        ? rect.top + scrollY + rect.height + 10
-        : 0,
-    bottom:
-      height / 2 <= rect.y + rect.height / 2
-        ? height - rect.bottom - scrollY + rect.height + 10
-        : 0,
-    date: date,
-    possible: dateMap[date].possible,
-    impossible: dateMap[date].impossible,
-  });
-};
+  useEffect(() => {
+    if (hover) {
+      const { date, rect } = hover;
+      const height = window.innerHeight;
+      const width = window.innerWidth;
+      const scrollY = window.scrollY;
+      setModalInfo({
+        left:
+          width / 2 > rect.x + rect.width / 2
+            ? (rect.left + 10).toString() + "px"
+            : "auto",
+        right:
+          width / 2 <= rect.x + rect.width / 2
+            ? (width - rect.right + 10).toString() + "px"
+            : "auto",
+        top:
+          height / 2 > rect.y + rect.height / 2
+            ? (rect.top + scrollY + rect.height + 10).toString() + "px"
+            : "auto",
+        bottom:
+          height / 2 <= rect.y + rect.height / 2
+            ? (height - rect.bottom - scrollY + rect.height + 10).toString() +
+              "px"
+            : "auto",
+        date: date,
+        possible: dateMap[date].possible,
+        impossible: dateMap[date].impossible,
+      });
+    } else {
+      setModalInfo(null);
+    }
+  }, [dateMap, hover]);
 
-const ModalMain = ({ modalInfo }: ModalPropsInterface) => {
   const date =
     modalInfo &&
     dayjs(modalInfo.date).locale("ko").format("YYYY년 MM월 DD일 ddd요일");
@@ -72,41 +73,10 @@ const ModalMain = ({ modalInfo }: ModalPropsInterface) => {
       </List.Item>
     ));
 
-  const modalPosition = (): CSSProperties => {
-    if (modalInfo && modalInfo.top !== 0 && modalInfo.left !== 0) {
-      return {
-        position: "absolute",
-        left: modalInfo.left,
-        top: modalInfo.top,
-      };
-    } else if (modalInfo && modalInfo.bottom !== 0 && modalInfo.left !== 0) {
-      return {
-        position: "absolute",
-        left: modalInfo.left,
-        bottom: modalInfo.bottom,
-      };
-    } else if (modalInfo && modalInfo.top !== 0 && modalInfo.right !== 0) {
-      return {
-        position: "absolute",
-        right: modalInfo.right,
-        top: modalInfo.top,
-      };
-    } else if (modalInfo && modalInfo.bottom !== 0 && modalInfo.right !== 0) {
-      return {
-        position: "absolute",
-        right: modalInfo.right,
-        bottom: modalInfo.bottom,
-      };
-    }
-    return {
-      display: "none",
-    };
-  };
-
   return (
     <>
       {modalInfo && (
-        <div style={modalPosition()} css={modalCss}>
+        <div css={modalCss(modalInfo)}>
           <div css={modalDateCss}>{date}</div>
           <div css={modalLabelCss}>
             <FontAwesomeIcon className="fa" icon={faThumbsUp} />
@@ -124,13 +94,19 @@ const ModalMain = ({ modalInfo }: ModalPropsInterface) => {
   );
 };
 
-const modalCss = css`
+const modalCss = (modalInfo: modalInterface) => css`
+  position: absolute;
+  top: ${modalInfo.top};
+  bottom: ${modalInfo.bottom};
+  left: ${modalInfo.left};
+  right: ${modalInfo.right};
   background-color: white;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.04);
   border: 1px solid ${common.colors.tenaryGrey};
   border-radius: 0.5rem;
   padding: 1rem;
   transition: all 0.2s;
+  display: block;
 `;
 const modalDateCss = css`
   font-size: 0.67rem;
@@ -153,6 +129,4 @@ const modalBadgeCss = css`
   background-color: ${common.colors.tenaryGrey};
 `;
 
-export const Modal = Object.assign(ModalMain, {
-  handle: modalHandle,
-});
+export { Modal };

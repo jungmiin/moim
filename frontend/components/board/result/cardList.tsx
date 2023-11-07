@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, MouseEvent } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import { List } from "../../common/list";
@@ -7,6 +7,8 @@ import { css } from "@emotion/react";
 import { Modal } from "@/components/common/modal";
 import {
   dateMapInterface,
+  dateInterface,
+  hoverInterface,
   modalInterface,
   resultInterface,
 } from "@/interfaces";
@@ -23,11 +25,26 @@ const CardList = ({ dateMap, result }: cardListProps) => {
     null
   );
   const [modalInfo, setModalInfo] = useState<modalInterface | null>(null);
+  const [hover, setHover] = useState<hoverInterface | null>(null);
 
   useEffect(() => {
     setOptimalResult(result[0]);
     setOtherResult(result.slice(1, 5));
   }, [result]);
+
+  const handleDayEnter = (
+    e: MouseEvent<HTMLButtonElement>,
+    result: resultInterface
+  ) => {
+    const target = e.currentTarget as HTMLButtonElement;
+    const date = result.date.toString();
+    const rect = target.getBoundingClientRect();
+    setHover({ date, rect });
+  };
+
+  const handleDayLeave = (e: MouseEvent<HTMLButtonElement>) => {
+    setHover(null);
+  };
 
   const renderOptimalCard = () => {
     return (
@@ -56,10 +73,8 @@ const CardList = ({ dateMap, result }: cardListProps) => {
               <button
                 id={optimalResult.date.toString()}
                 css={detailButtonCss}
-                onMouseOver={(e: any) =>
-                  Modal.handle({ e, setModalInfo, dateMap })
-                }
-                onMouseOut={() => setModalInfo(null)}
+                onMouseEnter={(e) => handleDayEnter(e, optimalResult)}
+                onMouseLeave={(e) => handleDayLeave(e)}
               >
                 자세히 보기
               </button>
@@ -88,10 +103,8 @@ const CardList = ({ dateMap, result }: cardListProps) => {
                 <button
                   id={date.date.toString()}
                   css={detailButtonCss}
-                  onMouseOver={(e: any) =>
-                    Modal.handle({ e, setModalInfo, dateMap })
-                  }
-                  onMouseOut={(e: any) => setModalInfo(null)}
+                  onMouseOver={(e) => handleDayEnter(e, date)}
+                  onMouseOut={(e) => handleDayLeave(e)}
                 >
                   자세히 보기
                 </button>
@@ -107,7 +120,7 @@ const CardList = ({ dateMap, result }: cardListProps) => {
       <List>
         {optimalResult && renderOptimalCard()}
         {otherResult && renderOtherCards()}
-        {modalInfo && <Modal modalInfo={modalInfo} />}
+        <Modal hover={hover} dateMap={dateMap} />
       </List>
     );
   };
