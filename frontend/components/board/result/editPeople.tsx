@@ -22,13 +22,15 @@ const EditPeople = ({ toggleAddPeople, boardData }: editPeopleProps) => {
   };
 
   const handleAddUser = () => {
-    addUser({
-      boardId: boardData._id,
-      user: {
-        userName,
-        userColor: getRandomPastelColor(),
-      },
-    });
+    if (userName !== "") {
+      addUser({
+        boardId: boardData._id,
+        user: {
+          userName,
+          userColor: getRandomPastelColor(),
+        },
+      });
+    }
   };
 
   return (

@@ -11,6 +11,16 @@ const useGetQuery = (url: string, key: string, etc?: object) => {
   return { status, data };
 };
 
+const usePostMutate = (url: string, etc?: object) => {
+  const mutationFn = async (body: any) => {
+    console.log(body);
+    const response = await axios.post(url, body);
+    return response.data;
+  };
+  const { isPending, mutate } = useMutation({ mutationFn, ...etc });
+  return { isPending, mutate };
+};
+
 const useDeleteMutate = (url: string, etc?: object) => {
   const mutationFn = async (body: any) => {
     const response = await axios.delete(url, { data: body });
@@ -29,4 +39,4 @@ const useUpdateMutate = (url: string, etc?: object) => {
   return { mutate };
 };
 
-export { useGetQuery, useDeleteMutate, useUpdateMutate };
+export { usePostMutate, useGetQuery, useDeleteMutate, useUpdateMutate };

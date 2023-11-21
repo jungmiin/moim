@@ -1,9 +1,9 @@
+import { usePostBoard } from "@/hooks/useBoard";
 import { common } from "@/styles/common";
 import { css } from "@emotion/react";
 import { Alata } from "@next/font/google";
-import { useState } from "react";
 import Spinner from "../common/loading";
-import { MoimNameDropdown } from "./moimNameDropdown";
+import { MoimInput } from "./moimInput";
 
 const alata = Alata({ weight: ["400"], preload: false });
 
@@ -14,13 +14,18 @@ const GenerateLoading = () => (
 );
 
 const MainWrapper = () => {
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const { isPending: isGenerated, mutate: postBoard } = usePostBoard();
+  const generateNewBoard = (input: string) => {
+    if (input !== "") {
+      postBoard({ boardName: input });
+    }
+  };
   return (
     <div css={wrapperCss}>
       <div css={descWrapperCss}>#오늘부턴_약속도_간편하게_🤩</div>
       <div css={titleCss}>moim</div>
-      <MoimNameDropdown setLoading={setLoading} />
-      {isLoading && <GenerateLoading />}
+      <MoimInput generateNewBoard={generateNewBoard} />
+      {isGenerated && <GenerateLoading />}
     </div>
   );
 };
@@ -46,6 +51,7 @@ const wrapperCss = css`
   flex-direction: column;
   align-items: center;
   z-index: 4;
+  margin-top: 33vh;
 `;
 const titleCss = css`
   color: white;

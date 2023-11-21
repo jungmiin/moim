@@ -5,16 +5,14 @@ import { common } from "@/styles/common";
 import { useToast } from "@/components/common/toast/context";
 import Head from "next/head";
 import { boardDataInterface } from "@/interfaces";
-import Loading from "../common/loading";
 import { useGetBoard } from "@/hooks/useBoard";
 
 const BoardWrapper = () => {
   const toast = useToast();
   const { data: boardData } = useGetBoard();
-
   return (
     <>
-      {boardData ? (
+      {boardData && (
         <div css={wrapperCss}>
           <Head>
             <title>{`${
@@ -33,8 +31,6 @@ const BoardWrapper = () => {
             모임 링크 공유하기
           </button>
         </div>
-      ) : (
-        <Loading />
       )}
     </>
   );
