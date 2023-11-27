@@ -18,6 +18,7 @@ export const generateNewBoard = async (boardName: string) => {
 
 export const getBoard = async (boardId: string) => {
   try {
+    console.log(boardId);
     const result = await findBoardById(new ObjectId(boardId));
     return result;
   } catch (err) {

@@ -6,7 +6,7 @@ const useGetBoard = () => {
   const router = useRouter();
   const { boardId } = router.query;
   return useGetQuery(`/api/board/${boardId}`, "board", {
-    enabled: router.isReady,
+    enabled: !!router.query.boardId,
   });
 };
 
