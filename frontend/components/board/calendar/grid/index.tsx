@@ -54,7 +54,6 @@ const Grid = ({
   };
 
   const handleDayClick = (e: MouseEvent<HTMLDivElement>, day: dayInterface) => {
-    console.log(e.nativeEvent.currentTarget);
     if (isEditMode) {
       if (day.isCurrentMonth && selectedUser) {
         selectDay(e);

@@ -13,7 +13,6 @@ const useGetQuery = (url: string, key: string, etc?: object) => {
 
 const usePostMutate = (url: string, etc?: object) => {
   const mutationFn = async (body: any) => {
-    console.log(body);
     const response = await axios.post(url, body);
     return response.data;
   };
