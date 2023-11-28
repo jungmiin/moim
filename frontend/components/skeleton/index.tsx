@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Alata } from "@next/font/google";
 import { common } from "@/styles/common";
+import MonthSkeleton from "./month";
+import ResultSkeleton from "./result";
 
 const alata = Alata({ weight: ["400"], preload: false });
 
@@ -14,16 +16,14 @@ const Skeleton = () => {
           <span className="moim">
             moim
             <span className="skeleton">
-              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;
+              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             </span>
           </span>
         </span>
         <div className="calendar">
           <div className="header">
             <div className="month-control">
-              <div className="month">
-                <div className="skeleton"></div>
-              </div>
+              <div className="skeleton"></div>
               <div className="button">
                 <FontAwesomeIcon
                   className="fa"
@@ -43,158 +43,12 @@ const Skeleton = () => {
               <div className="day">일</div>
             </div>
           </div>
-          <div className="grid">
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-            <div className="day">
-              <div className="skeleton"></div>
-            </div>
-          </div>
+          <MonthSkeleton />
         </div>
       </div>
       <div className="result-wrapper">
         <div className="button">인원 추가하기</div>
-        <div className="result">
-          <div className="title">
-            <div className="skeleton"></div>
-          </div>
-          <div className="desc">
-            <div className="skeleton"></div>
-          </div>
-        </div>
-        <div className="result-label">이 날짜는 어떤가요?</div>
-        <div className="result">
-          <div className="title">
-            <div className="skeleton"></div>
-          </div>
-          <div className="desc">
-            <div className="skeleton"></div>
-          </div>
-        </div>
-        <div className="result">
-          <div className="title">
-            <div className="skeleton"></div>
-          </div>
-          <div className="desc">
-            <div className="skeleton"></div>
-          </div>
-        </div>
-        <div className="result">
-          <div className="title">
-            <div className="skeleton"></div>
-          </div>
-          <div className="desc">
-            <div className="skeleton"></div>
-          </div>
-        </div>
-        <div className="result">
-          <div className="title">
-            <div className="skeleton"></div>
-          </div>
-          <div className="desc">
-            <div className="skeleton"></div>
-          </div>
-        </div>
+        <ResultSkeleton />
       </div>
     </div>
   );
@@ -240,16 +94,15 @@ const skeletonCss = css`
           display: flex;
           justify-content: space-between;
           align-items: center;
-          .month {
-            .skeleton {
-              width: 6rem;
-              height: 1rem;
-              background: ${common.gradient.skeletonGradient};
-              background-size: 200vw 100vh;
-              background-position: 100vw 0;
-              animation: shimmer 2s infinite;
-              border-radius: 0.1rem;
-            }
+          .skeleton {
+            width: 6rem;
+            height: 0.9rem;
+            background: ${common.gradient.skeletonGradient};
+            background-size: 200vw 100vh;
+            background-position: 100vw 0;
+            animation: shimmer 2s infinite;
+            border-radius: 0.1rem;
+            margin: 0.5rem;
           }
           .button {
             padding: 0.1rem 0.8rem;
@@ -276,29 +129,6 @@ const skeletonCss = css`
           }
         }
       }
-      .grid {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        border-top: solid 1px ${common.colors.tenaryGrey};
-        border-left: solid 1px ${common.colors.tenaryGrey};
-        .day {
-          width: 3.6rem;
-          height: 3.6rem;
-          padding: 0.75rem;
-          border-bottom: solid 1px ${common.colors.tenaryGrey};
-          border-right: solid 1px ${common.colors.tenaryGrey};
-          .skeleton {
-            width: 1rem;
-            height: 1rem;
-            background: ${common.gradient.skeletonGradient};
-            background-size: 200vw 100vh;
-            background-position: 100vw 0;
-            animation: shimmer 2s infinite;
-            border-radius: 0.1rem;
-          }
-        }
-      }
     }
   }
   .result-wrapper {
@@ -308,6 +138,7 @@ const skeletonCss = css`
     .button {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 0.2rem;
       border: 1px solid ${common.colors.primaryColor};
       border-radius: 3rem;
@@ -317,44 +148,6 @@ const skeletonCss = css`
       font-weight: 700;
       font-size: 0.75rem;
       margin: 1rem 0;
-    }
-    .result-label {
-      font-size: 0.67rem;
-      font-weight: 700;
-      color: ${common.colors.primaryColor};
-      margin-bottom: 0.8rem;
-    }
-    .result {
-      margin-bottom: 0.6rem;
-      padding: 1rem;
-      background: white;
-      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.04);
-      border: 1px solid ${common.colors.tenaryGrey};
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-      width: 15rem;
-      .title {
-        margin-bottom: 0.8rem;
-        .skeleton {
-          width: 6rem;
-          height: 1rem;
-          background: ${common.gradient.skeletonGradient};
-          background-size: 200vw 100vh;
-          background-position: 100vw 0;
-          animation: shimmer 2s infinite;
-          border-radius: 0.1rem;
-        }
-      }
-      .desc {
-        .skeleton {
-          width: 8rem;
-          height: 0.8rem;
-          background: ${common.gradient.skeletonGradient};
-          background-size: 200vw 100vh;
-          background-position: 100vw 0;
-          animation: shimmer 2s infinite;
-          border-radius: 0.1rem;
-        }
       }
     }
     @keyframes shimmer {

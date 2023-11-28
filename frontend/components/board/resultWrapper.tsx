@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { css } from "@emotion/react";
 import EditPeople from "@/components/board/result/editPeople";
@@ -6,7 +6,6 @@ import { common } from "@/styles/common";
 import CardList from "./result/cardList";
 import { convertUserToDay } from "@/lib/day";
 import {
-  userInterface,
   dateMapInterface,
   boardDataInterface,
   resultInterface,
@@ -18,17 +17,13 @@ interface resultWrapperProps {
 
 const ResultWrapper = ({ boardData }: resultWrapperProps) => {
   const [isAddPeople, setAddPeople] = useState(false);
-  const [result, setResult] = useState<resultInterface[]>([]);
+  const [result, setResult] = useState<resultInterface[] | null>(null);
   const [dateMap, setDateMap] = useState<dateMapInterface>({});
-
-  useEffect(() => {
-    const newDateMap = convertUserToDay(boardData) as dateMapInterface;
-    setDateMap(newDateMap);
-  }, [boardData]);
 
   // possible 인원 기준으로 dateMap sort
   useEffect(() => {
-    const sortedDateMap = Object.entries(dateMap).sort(
+    const newDateMap = convertUserToDay(boardData) as dateMapInterface;
+    const sortedDateMap = Object.entries(newDateMap).sort(
       (a, b) => b[1].possible.length - a[1].possible.length
     );
     const newResult = sortedDateMap.map((date) => {
@@ -38,8 +33,9 @@ const ResultWrapper = ({ boardData }: resultWrapperProps) => {
         impossible: date[1].impossible,
       };
     });
+    setDateMap(newDateMap);
     setResult(newResult);
-  }, [dateMap]);
+  }, [boardData]);
 
   const toggleAddPeople = () => {
     setAddPeople(!isAddPeople);
@@ -66,6 +62,7 @@ const ResultWrapper = ({ boardData }: resultWrapperProps) => {
 const buttonCss = css`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 0.2rem;
   border: 1px solid ${common.colors.primaryColor};
   border-radius: 3rem;
@@ -76,8 +73,9 @@ const buttonCss = css`
   font-size: 0.75rem;
   margin: 1rem 0;
   &::before {
+    min-width: 0.8rem;
     opacity: 0;
-    margin-left: -0.5em;
+    margin-left: -1.3em;
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     content: "+";
@@ -85,7 +83,7 @@ const buttonCss = css`
   }
   &:hover {
     &::before {
-      margin-left: 0.5rem;
+      margin-left: 0.2rem;
       opacity: 1;
     }
   }
@@ -110,4 +108,4 @@ const wrapperCss = css`
   }
 `;
 
-export default ResultWrapper;
+export default memo(ResultWrapper);
