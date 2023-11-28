@@ -59,7 +59,7 @@ const progressCss = css`
   width: 100%;
   height: 0.2rem;
   background-color: ${common.colors.primaryColor};
-  animation: progressBar 3s linear;
+  animation: progressBar 3.1s linear;
   @keyframes progressBar {
     0% {
       width: 100%;

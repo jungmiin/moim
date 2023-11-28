@@ -7,7 +7,6 @@ const ToastList = () => {
   const { toasts, deleteToast } = useToastStore();
 
   const onClose = (targetId: string) => {
-    console.log(targetId);
     deleteToast(targetId);
   };
 

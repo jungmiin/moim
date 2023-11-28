@@ -21,7 +21,6 @@ const useToastStore = create<toastsStoreInterface>((set) => ({
   deleteToast: (targetId: string) =>
     set((prev: toastsStoreInterface) => {
       const newToasts = prev.toasts.filter(({ id }) => id !== targetId);
-      console.log(prev.toasts, newToasts);
       return {
         toasts: newToasts,
       };
