@@ -3,7 +3,7 @@
 import { memo, MouseEvent, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { common } from "@/styles/common";
-import { Modal } from "@/components/common/modal";
+import { BoardResultModal } from "@/components/common/modal/boardResult";
 import useToastStore from "@/stores/toasts";
 import {
   dateMapInterface,
@@ -73,17 +73,12 @@ const Grid = ({
     }
   };
 
-  const handleDayLeave = (e: MouseEvent<HTMLDivElement>) => {
-    setClick(null);
-  };
-
   const Day = ({ day, dayIndex, weekIndex }: dayProps) => {
     return (
       <div
         id={day.key}
         key={weekIndex * 7 + dayIndex}
         onClick={(e) => handleDayClick(e, day)}
-        onMouseLeave={(e) => handleDayLeave(e)}
         css={dayCss(day, isEditMode)}
         className={`day ${weekIndex * 7 + dayIndex} ${
           day.isCurrentMonth ? "current" : "not-current"
@@ -124,7 +119,7 @@ const Grid = ({
       {month.length > 0 ? (
         <div css={monthCss}>
           <Month />
-          <Modal click={click} dateMap={dateMap} />
+          <BoardResultModal click={click} dateMap={dateMap} />
         </div>
       ) : (
         <MonthSkeleton />
@@ -178,7 +173,7 @@ const dayCss = (day: dayInterface, isEditMode: boolean) => css`
   &:after {
     border: ${common.colors.tenaryGrey} 1px solid;
   }
-  &:click {
+  &:hover {
     background-color: ${common.colors.tenaryColor};
   }
   .test {

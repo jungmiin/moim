@@ -4,7 +4,7 @@ import "dayjs/locale/ko";
 import { List } from "../../common/list";
 import { common } from "@/styles/common";
 import { css } from "@emotion/react";
-import { Modal } from "@/components/common/modal";
+import { BoardResultModal } from "@/components/common/modal/boardResult";
 import {
   dateMapInterface,
   clickInterface,
@@ -44,10 +44,6 @@ const CardList = ({ dateMap, result }: cardListProps) => {
     setClick({ date, rect });
   };
 
-  const handleLeave = (e: MouseEvent<HTMLButtonElement>) => {
-    setClick(null);
-  };
-
   const OptimalCard = () => {
     return (
       <>
@@ -76,7 +72,6 @@ const CardList = ({ dateMap, result }: cardListProps) => {
                 id={optimalResult.date.toString()}
                 css={detailButtonCss}
                 onClick={(e) => handleClick(e, optimalResult)}
-                onMouseLeave={(e) => handleLeave(e)}
               >
                 자세히 보기
               </button>
@@ -106,7 +101,6 @@ const CardList = ({ dateMap, result }: cardListProps) => {
                   id={date.date.toString()}
                   css={detailButtonCss}
                   onClick={(e) => handleClick(e, date)}
-                  onMouseLeave={(e) => handleLeave(e)}
                 >
                   자세히 보기
                 </button>
@@ -122,7 +116,7 @@ const CardList = ({ dateMap, result }: cardListProps) => {
       <List>
         {optimalResult ? <OptimalCard /> : <OptimalCardSkeleton />}
         {otherResult ? <OtherCards /> : <OtherCardsSkeleton />}
-        <Modal click={click} dateMap={dateMap} />
+        <BoardResultModal click={click} dateMap={dateMap} />
       </List>
     );
   };
@@ -152,8 +146,11 @@ const detailButtonCss = css`
   color: ${common.colors.primaryColor};
   border-radius: 1rem;
   font-size: 0.48rem;
-  transition: all 0.2s linear 0s;
   cursor: pointer;
+  &:hover {
+    color: ${common.colors.primaryWhite};
+    background-color: ${common.colors.primaryColor};
+  }
 `;
 
 const dateLabelCss = css`

@@ -42,10 +42,6 @@ export interface dayInterface {
   key: string;
 }
 export interface modalInterface {
-  left: string;
-  right: string;
-  top: string;
-  bottom: string;
   date: string;
   possible: userInterface[];
   impossible: userInterface[];
@@ -73,4 +69,23 @@ export interface toastsStoreInterface {
   toasts: toastInterface[];
   addToast: (arg0: string) => void;
   deleteToast: (arg0: string) => void;
+}
+
+export interface modalInfoInterface {
+  isOpen: boolean;
+  left: string | null;
+  right: string | null;
+  top: string | null;
+  bottom: string | null;
+}
+
+export interface modalStoreInterface {
+  info: modalInfoInterface;
+  open: (
+    top?: string | null,
+    left?: string | null,
+    bottom?: string | null,
+    right?: string | null
+  ) => void;
+  close: () => void;
 }
