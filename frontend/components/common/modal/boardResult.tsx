@@ -4,51 +4,11 @@ import { common } from "@/styles/common";
 import { List } from "@/components/common/list";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { clickInterface, dateMapInterface, modalInterface } from "@/interfaces";
 import Modal from ".";
 import useModalStore from "@/stores/modal";
 
-interface ModalProps {
-  click: clickInterface | null;
-  dateMap: dateMapInterface;
-}
-
-const BoardResultModal = ({ click, dateMap }: ModalProps) => {
-  const { open } = useModalStore();
-  const [boardResult, setBoardResult] = useState<modalInterface | null>(null);
-
-  useEffect(() => {
-    if (click) {
-      const { date, rect } = click;
-      const height = window.innerHeight;
-      const width = window.innerWidth;
-      const scrollY = window.scrollY;
-      const top =
-        height / 2 > rect.y + rect.height / 2
-          ? (rect.top + scrollY + rect.height + 10).toString() + "px"
-          : "auto";
-      const left =
-        width / 2 > rect.x + rect.width / 2
-          ? (rect.left + 10).toString() + "px"
-          : "auto";
-      const bottom =
-        height / 2 <= rect.y + rect.height / 2
-          ? (height - rect.bottom - scrollY + rect.height + 10).toString() +
-            "px"
-          : "auto";
-      const right =
-        width / 2 <= rect.x + rect.width / 2
-          ? (width - rect.right + 10).toString() + "px"
-          : "auto";
-      open(top, left, bottom, right);
-      setBoardResult({
-        date: date,
-        possible: dateMap[date].possible,
-        impossible: dateMap[date].impossible,
-      });
-    }
-  }, [click]);
+const BoardResultModal = () => {
+  const { boardResult, boardResultClose } = useModalStore();
 
   const date =
     boardResult &&
@@ -76,23 +36,19 @@ const BoardResultModal = ({ click, dateMap }: ModalProps) => {
     ));
 
   return (
-    <>
-      {boardResult && (
-        <Modal>
-          <div css={modalDateCss}>{date}</div>
-          <div css={modalLabelCss}>
-            <FontAwesomeIcon className="fa" icon={faThumbsUp} />
-            가능한 사람
-          </div>
-          <List style={{ display: "flex", gap: "0.1rem" }}>{possible}</List>
-          <div css={modalLabelCss}>
-            <FontAwesomeIcon className="fa" icon={faThumbsDown} />
-            불가능한 사람
-          </div>
-          <List style={{ display: "flex", gap: "0.1rem" }}>{impossible}</List>
-        </Modal>
-      )}
-    </>
+    <Modal onClose={boardResultClose}>
+      <div css={modalDateCss}>{date}</div>
+      <div css={modalLabelCss}>
+        <FontAwesomeIcon className="fa" icon={faThumbsUp} />
+        가능한 사람
+      </div>
+      <List style={{ display: "flex", gap: "0.1rem" }}>{possible}</List>
+      <div css={modalLabelCss}>
+        <FontAwesomeIcon className="fa" icon={faThumbsDown} />
+        불가능한 사람
+      </div>
+      <List style={{ display: "flex", gap: "0.1rem" }}>{impossible}</List>
+    </Modal>
   );
 };
 

@@ -1,31 +1,27 @@
-import { useEffect, useState, MouseEvent } from "react";
-import dayjs from "dayjs";
+import { useEffect, useState, MouseEvent, memo } from "react";
 import "dayjs/locale/ko";
 import { List } from "../../common/list";
 import { common } from "@/styles/common";
 import { css } from "@emotion/react";
-import { BoardResultModal } from "@/components/common/modal/boardResult";
-import {
-  dateMapInterface,
-  clickInterface,
-  resultInterface,
-} from "@/interfaces";
+import { dateMapInterface, resultInterface } from "@/interfaces";
 import ResultSkeleton from "@/components/skeleton/result";
 import OtherCardsSkeleton from "@/components/skeleton/otherCards";
 import OptimalCardSkeleton from "@/components/skeleton/optimalCard";
+import useModalStore from "@/stores/modal";
+import getPosition from "@/lib/getPosition";
 interface cardListProps {
   dateMap: dateMapInterface;
   result: resultInterface[] | null;
 }
 
 const CardList = ({ dateMap, result }: cardListProps) => {
+  const { boardResultOpen } = useModalStore();
   const [optimalResult, setOptimalResult] = useState<resultInterface | null>(
     null
   );
   const [otherResult, setOtherResult] = useState<resultInterface[] | null>(
     null
   );
-  const [click, setClick] = useState<clickInterface | null>(null);
 
   useEffect(() => {
     if (result && result.length > 0) {
@@ -41,7 +37,10 @@ const CardList = ({ dateMap, result }: cardListProps) => {
     const target = e.currentTarget as HTMLButtonElement;
     const date = result.date.toString();
     const rect = target.getBoundingClientRect();
-    setClick({ date, rect });
+    const { top, left, bottom, right } = getPosition(rect);
+    const possible = dateMap[date].possible;
+    const impossible = dateMap[date].impossible;
+    boardResultOpen(top, left, bottom, right, date, possible, impossible);
   };
 
   const OptimalCard = () => {
@@ -116,7 +115,6 @@ const CardList = ({ dateMap, result }: cardListProps) => {
       <List>
         {optimalResult ? <OptimalCard /> : <OptimalCardSkeleton />}
         {otherResult ? <OtherCards /> : <OtherCardsSkeleton />}
-        <BoardResultModal click={click} dateMap={dateMap} />
       </List>
     );
   };
@@ -248,4 +246,4 @@ const descCss = css`
   color: ${common.colors.primaryGrey};
 `;
 
-export default CardList;
+export default memo(CardList);

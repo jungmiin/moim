@@ -1,9 +1,11 @@
 import useModalStore from "@/stores/modal";
 import { css } from "@emotion/react";
 
-const Dimd = () => {
+const Dimd = ({ onClose }: { onClose?: Function }) => {
   const { close } = useModalStore();
-  return <div css={dimdCss} onClick={() => close()}></div>;
+  return (
+    <div css={dimdCss} onClick={() => (onClose ? onClose() : close())}></div>
+  );
 };
 
 const dimdCss = css`

@@ -79,8 +79,15 @@ export interface modalInfoInterface {
   bottom: string | null;
 }
 
+export interface boardResultInterface {
+  date: string | null;
+  possible: userInterface[];
+  impossible: userInterface[];
+}
+
 export interface modalStoreInterface {
   info: modalInfoInterface;
+  boardResult: boardResultInterface;
   open: (
     top?: string | null,
     left?: string | null,
@@ -88,4 +95,14 @@ export interface modalStoreInterface {
     right?: string | null
   ) => void;
   close: () => void;
+  boardResultOpen: (
+    top: string,
+    left: string,
+    bottom: string,
+    right: string,
+    date: string,
+    possible: userInterface[],
+    impossible: userInterface[]
+  ) => void;
+  boardResultClose: () => void;
 }

@@ -10,12 +10,6 @@ const ToastList = () => {
     deleteToast(targetId);
   };
 
-  // client.js:1 Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.
-  //   at ToastList (webpack-internal:///./components/common/toast/list.tsx:32:95)
-  //   at ToastPortal (webpack-internal:///./components/common/toast/portal.tsx:12:11)
-  //   at Toast
-  //   at Suspense
-
   return (
     <div css={messagesCss}>
       {toasts.map((toast: toastInterface) => {

@@ -6,8 +6,7 @@ import useToastStore from "@/stores/toasts";
 import Head from "next/head";
 import { boardDataInterface } from "@/interfaces";
 import { useGetBoard } from "@/hooks/useBoard";
-import { useEffect } from "react";
-import Toast from "../common/toast";
+import { BoardResultModal } from "../common/modal/boardResult";
 
 const BoardWrapper = () => {
   const { addToast } = useToastStore();
@@ -32,6 +31,7 @@ const BoardWrapper = () => {
           >
             모임 링크 공유하기
           </button>
+          <BoardResultModal />
         </div>
       )}
     </>

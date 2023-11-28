@@ -1,17 +1,13 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource @emotion/react */
-import { memo, MouseEvent, useRef, useState } from "react";
+import { memo, MouseEvent, useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { common } from "@/styles/common";
-import { BoardResultModal } from "@/components/common/modal/boardResult";
 import useToastStore from "@/stores/toasts";
-import {
-  dateMapInterface,
-  dayInterface,
-  clickInterface,
-  userInterface,
-} from "@/interfaces";
+import { dateMapInterface, dayInterface, userInterface } from "@/interfaces";
 import MonthSkeleton from "@/components/skeleton/month";
+import useModalStore from "@/stores/modal";
+import getPosition from "@/lib/getPosition";
 
 interface gridProps {
   month: dayInterface[][];
@@ -39,7 +35,7 @@ const Grid = ({
   selectedDays,
   setSelectedDays,
 }: gridProps) => {
-  const [click, setClick] = useState<clickInterface | null>(null);
+  const { boardResultOpen } = useModalStore();
   const { addToast } = useToastStore();
 
   const selectDay = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -67,9 +63,10 @@ const Grid = ({
       const target = e.currentTarget as HTMLDivElement;
       const date = target.id;
       const rect = target.getBoundingClientRect();
-      setClick({ date, rect });
-    } else {
-      setClick(null);
+      const { top, left, bottom, right } = getPosition(rect);
+      const possible = dateMap[date].possible;
+      const impossible = dateMap[date].impossible;
+      boardResultOpen(top, left, bottom, right, date, possible, impossible);
     }
   };
 
@@ -119,7 +116,6 @@ const Grid = ({
       {month.length > 0 ? (
         <div css={monthCss}>
           <Month />
-          <BoardResultModal click={click} dateMap={dateMap} />
         </div>
       ) : (
         <MonthSkeleton />
