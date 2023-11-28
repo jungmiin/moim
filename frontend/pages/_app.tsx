@@ -3,7 +3,6 @@ import { globalStyles } from "@/styles/global";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import Script from "next/script";
-import ToastProvider from "@/components/common/toast/context";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -25,10 +24,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         crossOrigin="anonymous"
       ></Script>
       <QueryClientProvider client={queryClient}>
-        <ToastProvider>
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ToastProvider>
+        <Component {...pageProps} />
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );

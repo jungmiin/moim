@@ -60,7 +60,17 @@ export interface dateMapInterface {
 export interface resultInterface extends dateInterface {
   date: dayjs.Dayjs;
 }
-export interface hoverInterface {
+export interface clickInterface {
   date: string;
   rect: DOMRect;
+}
+
+export interface toastInterface {
+  message: string;
+  id: string;
+}
+export interface toastsStoreInterface {
+  toasts: toastInterface[];
+  addToast: (arg0: string) => void;
+  deleteToast: (arg0: string) => void;
 }
