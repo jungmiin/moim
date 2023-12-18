@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import dayjs from "dayjs";
 import Header from "./header";
 import { convertUserToDay, getMonth } from "@/lib/day";
@@ -71,4 +71,4 @@ const Calendar = ({ boardData }: calendarProps) => {
   );
 };
 
-export default Calendar;
+export default memo(Calendar);

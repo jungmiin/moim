@@ -42,10 +42,6 @@ export interface dayInterface {
   key: string;
 }
 export interface modalInterface {
-  left: string;
-  right: string;
-  top: string;
-  bottom: string;
   date: string;
   possible: userInterface[];
   impossible: userInterface[];
@@ -60,7 +56,53 @@ export interface dateMapInterface {
 export interface resultInterface extends dateInterface {
   date: dayjs.Dayjs;
 }
-export interface hoverInterface {
+export interface clickInterface {
   date: string;
   rect: DOMRect;
+}
+
+export interface toastInterface {
+  message: string;
+  id: string;
+}
+export interface toastsStoreInterface {
+  toasts: toastInterface[];
+  addToast: (arg0: string) => void;
+  deleteToast: (arg0: string) => void;
+}
+
+export interface modalInfoInterface {
+  isOpen: boolean;
+  left: string | null;
+  right: string | null;
+  top: string | null;
+  bottom: string | null;
+}
+
+export interface boardResultInterface {
+  date: string | null;
+  possible: userInterface[];
+  impossible: userInterface[];
+}
+
+export interface modalStoreInterface {
+  info: modalInfoInterface;
+  boardResult: boardResultInterface;
+  open: (
+    top?: string | null,
+    left?: string | null,
+    bottom?: string | null,
+    right?: string | null
+  ) => void;
+  close: () => void;
+  boardResultOpen: (
+    top: string,
+    left: string,
+    bottom: string,
+    right: string,
+    date: string,
+    possible: userInterface[],
+    impossible: userInterface[]
+  ) => void;
+  boardResultClose: () => void;
 }

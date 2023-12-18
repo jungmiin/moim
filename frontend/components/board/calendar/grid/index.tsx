@@ -1,16 +1,13 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource @emotion/react */
-import { memo, MouseEvent, useRef, useState } from "react";
+import { memo, MouseEvent, useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { common } from "@/styles/common";
-import { Modal } from "@/components/common/modal";
-import { useToast } from "@/components/common/toast/context";
-import {
-  dateMapInterface,
-  dayInterface,
-  hoverInterface,
-  userInterface,
-} from "@/interfaces";
+import useToastStore from "@/stores/toasts";
+import { dateMapInterface, dayInterface, userInterface } from "@/interfaces";
+import MonthSkeleton from "@/components/skeleton/month";
+import useModalStore from "@/stores/modal";
+import getPosition from "@/lib/getPosition";
 
 interface gridProps {
   month: dayInterface[][];
@@ -38,8 +35,8 @@ const Grid = ({
   selectedDays,
   setSelectedDays,
 }: gridProps) => {
-  const [hover, setHover] = useState<hoverInterface | null>(null);
-  const toast = useToast();
+  const { boardResultOpen } = useModalStore();
+  const { addToast } = useToastStore();
 
   const selectDay = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.currentTarget as HTMLDivElement;
@@ -58,24 +55,19 @@ const Grid = ({
       if (day.isCurrentMonth && selectedUser) {
         selectDay(e);
       } else if (day.isCurrentMonth) {
-        toast && toast.message("사람을 선택해야 날짜를 선택할 수 있어요.");
+        addToast("사람을 선택해야 날짜를 선택할 수 있어요.");
       } else {
-        toast && toast.message("상단의 화살표를 통해 달을 변경해주세요.");
+        addToast("상단의 화살표를 통해 달을 변경해주세요.");
       }
-    }
-  };
-  const handleDayEnter = (e: MouseEvent<HTMLDivElement>, day: dayInterface) => {
-    if (!isEditMode && day.possibleUsers.length > 0) {
+    } else if (day.possibleUsers.length > 0) {
       const target = e.currentTarget as HTMLDivElement;
       const date = target.id;
       const rect = target.getBoundingClientRect();
-      setHover({ date, rect });
-    } else {
-      setHover(null);
+      const { top, left, bottom, right } = getPosition(rect);
+      const possible = dateMap[date].possible;
+      const impossible = dateMap[date].impossible;
+      boardResultOpen(top, left, bottom, right, date, possible, impossible);
     }
-  };
-  const handleDayLeave = (e: MouseEvent<HTMLDivElement>) => {
-    setHover(null);
   };
 
   const Day = ({ day, dayIndex, weekIndex }: dayProps) => {
@@ -84,8 +76,6 @@ const Grid = ({
         id={day.key}
         key={weekIndex * 7 + dayIndex}
         onClick={(e) => handleDayClick(e, day)}
-        onMouseEnter={(e) => handleDayEnter(e, day)}
-        onMouseLeave={(e) => handleDayLeave(e)}
         css={dayCss(day, isEditMode)}
         className={`day ${weekIndex * 7 + dayIndex} ${
           day.isCurrentMonth ? "current" : "not-current"
@@ -122,10 +112,15 @@ const Grid = ({
   };
 
   return (
-    <div css={monthCss}>
-      <Month />
-      <Modal hover={hover} dateMap={dateMap} />
-    </div>
+    <>
+      {month.length > 0 ? (
+        <div css={monthCss}>
+          <Month />
+        </div>
+      ) : (
+        <MonthSkeleton />
+      )}
+    </>
   );
 };
 

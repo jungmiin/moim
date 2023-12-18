@@ -1,37 +1,15 @@
 import { Form } from "../common/form";
 import { Dropdown } from "../common/dropdown";
 import { common } from "@/styles/common";
-import Router from "next/router";
 import { css } from "@emotion/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 
-export const MoimNameDropdown = ({
-  setLoading,
-}: {
-  setLoading: Dispatch<SetStateAction<boolean>>;
-}) => {
+interface moimInputProps {
+  generateNewBoard: Function;
+}
+
+export const MoimInput = ({ generateNewBoard }: moimInputProps) => {
   const [moimName, setMoimName] = useState("");
-
-  const generateNewBoard = async (input: string) => {
-    setLoading(true);
-    const response = await fetch("/api/board", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        boardName: input,
-      }),
-    });
-    if (response.status === 200) {
-      const { boardUrl } = await response.json();
-      Router.push(`/board/${boardUrl}`);
-    } else {
-      throw new Error("POST /board");
-    }
-    setLoading(false);
-  };
-
   return (
     <Dropdown>
       <Dropdown.TriggerAndHide style={buttonStyle}>

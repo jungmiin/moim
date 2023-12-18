@@ -2,19 +2,18 @@ import { css } from "@emotion/react";
 import CalendarWrapper from "@/components/board/calendarWrapper";
 import ResultWrapper from "@/components/board/resultWrapper";
 import { common } from "@/styles/common";
-import { useToast } from "@/components/common/toast/context";
+import useToastStore from "@/stores/toasts";
 import Head from "next/head";
 import { boardDataInterface } from "@/interfaces";
-import Loading from "../common/loading";
 import { useGetBoard } from "@/hooks/useBoard";
+import { BoardResultModal } from "../common/modal/boardResult";
 
 const BoardWrapper = () => {
-  const toast = useToast();
+  const { addToast } = useToastStore();
   const { data: boardData } = useGetBoard();
-
   return (
     <>
-      {boardData ? (
+      {boardData && (
         <div css={wrapperCss}>
           <Head>
             <title>{`${
@@ -27,14 +26,13 @@ const BoardWrapper = () => {
             css={shareButtonCss}
             onClick={() => {
               navigator.clipboard.writeText(location.href);
-              toast && toast.message("링크가 복사되었어요!");
+              addToast("링크가 복사되었어요!");
             }}
           >
             모임 링크 공유하기
           </button>
+          <BoardResultModal />
         </div>
-      ) : (
-        <Loading />
       )}
     </>
   );

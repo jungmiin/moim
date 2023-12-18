@@ -4,6 +4,7 @@ import { common } from "@/styles/common";
 import { Alata } from "@next/font/google";
 import { boardDataInterface } from "@/interfaces";
 import Router from "next/router";
+import { memo } from "react";
 
 const alata = Alata({ weight: ["400"], preload: false });
 
@@ -67,4 +68,4 @@ const wrapperStyle = css`
   border-radius: 0.5rem;
 `;
 
-export default CalendarWrapper;
+export default memo(CalendarWrapper);

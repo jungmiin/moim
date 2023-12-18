@@ -8,6 +8,8 @@ export const common = {
       "linear-gradient(92.53deg, #f8fcff 0.98%, #f6f7ff 52.01%, #fbf9ff 98.97%)",
     quaternaryGradient:
       "linear-gradient(92.53deg, #f9fcff 0.98%, #f8f9ff 52.01%, #fbfaff 98.97%)",
+    skeletonGradient:
+      "linear-gradient(120deg,#F0F0F0 30%,#F5F5F5 38%,#F5F5F5 40%,#F0F0F0 48%);",
   },
   colors: {
     primaryColor: "#80A9DA",
@@ -18,6 +20,7 @@ export const common = {
     primaryWhite: "#FFFFFF",
     secondaryGrey: "#CCCCCC",
     tenaryGrey: "#F0F0F0",
+    quaternaryGrey: "#fafafa",
     labelPurple: "#CDB2F0",
     labelBlue: "#BBD1F3",
     labelSky: "#B0E7F3",

@@ -1,11 +1,20 @@
 import { Suspense } from "react";
-import BoardWrapper from "@/components/board";
-import Loading from "@/components/common/loading";
+import dynamic from "next/dynamic";
+import Skeleton from "@/components/skeleton";
+import Toast from "@/components/common/toast";
 
-const Board = () => (
-  <Suspense fallback={<Loading />}>
-    <BoardWrapper />
-  </Suspense>
-);
+const Board = () => {
+  const Board = dynamic(() => import("@/components/board"), {
+    ssr: false,
+    suspense: true,
+  });
+
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <Board />
+      <Toast />
+    </Suspense>
+  );
+};
 
 export default Board;

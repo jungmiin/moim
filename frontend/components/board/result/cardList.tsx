@@ -1,55 +1,52 @@
-import { useEffect, useState, MouseEvent } from "react";
-import dayjs from "dayjs";
+import { useEffect, useState, MouseEvent, memo } from "react";
 import "dayjs/locale/ko";
 import { List } from "../../common/list";
 import { common } from "@/styles/common";
 import { css } from "@emotion/react";
-import { Modal } from "@/components/common/modal";
-import {
-  dateMapInterface,
-  dateInterface,
-  hoverInterface,
-  modalInterface,
-  resultInterface,
-} from "@/interfaces";
+import { dateMapInterface, resultInterface } from "@/interfaces";
+import ResultSkeleton from "@/components/skeleton/result";
+import OtherCardsSkeleton from "@/components/skeleton/otherCards";
+import OptimalCardSkeleton from "@/components/skeleton/optimalCard";
+import useModalStore from "@/stores/modal";
+import getPosition from "@/lib/getPosition";
 interface cardListProps {
   dateMap: dateMapInterface;
-  result: resultInterface[];
+  result: resultInterface[] | null;
 }
 
 const CardList = ({ dateMap, result }: cardListProps) => {
+  const { boardResultOpen } = useModalStore();
   const [optimalResult, setOptimalResult] = useState<resultInterface | null>(
     null
   );
   const [otherResult, setOtherResult] = useState<resultInterface[] | null>(
     null
   );
-  const [modalInfo, setModalInfo] = useState<modalInterface | null>(null);
-  const [hover, setHover] = useState<hoverInterface | null>(null);
 
   useEffect(() => {
-    setOptimalResult(result[0]);
-    setOtherResult(result.slice(1, 5));
+    if (result && result.length > 0) {
+      setOptimalResult(result[0]);
+      setOtherResult(result.slice(1, 5));
+    }
   }, [result]);
 
-  const handleDayEnter = (
+  const handleClick = (
     e: MouseEvent<HTMLButtonElement>,
     result: resultInterface
   ) => {
     const target = e.currentTarget as HTMLButtonElement;
     const date = result.date.toString();
     const rect = target.getBoundingClientRect();
-    setHover({ date, rect });
+    const { top, left, bottom, right } = getPosition(rect);
+    const possible = dateMap[date].possible;
+    const impossible = dateMap[date].impossible;
+    boardResultOpen(top, left, bottom, right, date, possible, impossible);
   };
 
-  const handleDayLeave = (e: MouseEvent<HTMLButtonElement>) => {
-    setHover(null);
-  };
-
-  const renderOptimalCard = () => {
+  const OptimalCard = () => {
     return (
       <>
-        {optimalResult !== null && (
+        {optimalResult && (
           <List.Item css={listCss} index={optimalResult.date.toString()}>
             <span css={dateLabelCss}>제일 좋은 날짜는</span>
             <span css={optimalResultWrapperCss}>
@@ -73,8 +70,7 @@ const CardList = ({ dateMap, result }: cardListProps) => {
               <button
                 id={optimalResult.date.toString()}
                 css={detailButtonCss}
-                onMouseEnter={(e) => handleDayEnter(e, optimalResult)}
-                onMouseLeave={(e) => handleDayLeave(e)}
+                onClick={(e) => handleClick(e, optimalResult)}
               >
                 자세히 보기
               </button>
@@ -85,11 +81,11 @@ const CardList = ({ dateMap, result }: cardListProps) => {
     );
   };
 
-  const renderOtherCards = () => {
+  const OtherCards = () => {
     return (
       <>
         <div css={otherResultLabelCss}>이 날짜는 어떤가요?</div>
-        {otherResult !== null &&
+        {otherResult &&
           otherResult.map((date, index) => (
             <List.Item css={listCss} key={index} index={date.date.toString()}>
               <span css={otherResultCss}>
@@ -103,8 +99,7 @@ const CardList = ({ dateMap, result }: cardListProps) => {
                 <button
                   id={date.date.toString()}
                   css={detailButtonCss}
-                  onMouseOver={(e) => handleDayEnter(e, date)}
-                  onMouseOut={(e) => handleDayLeave(e)}
+                  onClick={(e) => handleClick(e, date)}
                 >
                   자세히 보기
                 </button>
@@ -115,27 +110,31 @@ const CardList = ({ dateMap, result }: cardListProps) => {
     );
   };
 
-  const renderCardList = () => {
+  const CardList = () => {
     return (
       <List>
-        {optimalResult && renderOptimalCard()}
-        {otherResult && renderOtherCards()}
-        <Modal hover={hover} dateMap={dateMap} />
+        {optimalResult ? <OptimalCard /> : <OptimalCardSkeleton />}
+        {otherResult ? <OtherCards /> : <OtherCardsSkeleton />}
       </List>
     );
   };
-  return (
-    <>
-      {result.length > 0 ? (
-        renderCardList()
-      ) : (
-        <div css={noResultCss}>
-          <div css={titleCss}>아직 선택한 날짜가 없어요.</div>
-          <div css={descCss}>인원을 추가한 뒤 날짜를 선택해주세요.</div>
-        </div>
-      )}
-    </>
-  );
+
+  const Result = () => {
+    return (
+      <>
+        {result && result.length > 0 ? (
+          <CardList />
+        ) : (
+          <div css={noResultCss}>
+            <div css={titleCss}>아직 선택한 날짜가 없어요.</div>
+            <div css={descCss}>인원을 추가한 뒤 날짜를 선택해주세요.</div>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  return <>{result ? <Result /> : <ResultSkeleton />}</>;
 };
 
 const detailButtonCss = css`
@@ -145,11 +144,10 @@ const detailButtonCss = css`
   color: ${common.colors.primaryColor};
   border-radius: 1rem;
   font-size: 0.48rem;
-  transition: all 0.2s linear 0s;
+  cursor: pointer;
   &:hover {
+    color: ${common.colors.primaryWhite};
     background-color: ${common.colors.primaryColor};
-    color: white;
-    cursor: pointer;
   }
 `;
 
@@ -248,4 +246,4 @@ const descCss = css`
   color: ${common.colors.primaryGrey};
 `;
 
-export default CardList;
+export default memo(CardList);
